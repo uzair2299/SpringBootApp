@@ -27,17 +27,22 @@ spring.jpa.properties.hibernate.globally_quoted_identifiers=true
 <h1>API Endpoints</h1>
 
 The following endpoints are available for this application:
-
-<h2>Create a new employee</h2>
+| Command  | Operation |
+| ------------- | ------------- |
+| `api/v1/users`  | Get  |
+| `api/v1/users`  | Post  |
+| `api/v1/users/{id}`  | Get  |
+| `api/v1/users/{id}`  | Put  |
+| `api/v1/users/{id}`  | Delete  |
+<h2>Create a new User</h2>
 /api/v1/users
 
 Example request body:
 
 ```
 {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com"
+    "id": "100",
+    "name": "Doe",
 }
 ```
 
