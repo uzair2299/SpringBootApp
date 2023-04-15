@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <variable name="LOG_PATH" value="D:\logs" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
@@ -11,10 +12,15 @@
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
 <!--        <file>myApp.log</file>-->
-        <file>D:\logs\myapp.log</file>
+        <file>${LOG_PATH}\myapp.log</file>
+
         <encoder>
             <pattern>%date %level [%thread] %logger{10} [%file:%line] -%kvp- %msg%n</pattern>
         </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+<!--            <fileNamePattern>application.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+            <maxFileSize>1MB</maxFileSize>
+        </rollingPolicy>
     </appender>
 
     <root level="info">
