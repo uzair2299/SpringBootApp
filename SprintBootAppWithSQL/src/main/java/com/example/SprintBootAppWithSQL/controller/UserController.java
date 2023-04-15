@@ -3,6 +3,8 @@ package com.example.SprintBootAppWithSQL.controller;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -21,12 +24,15 @@ public class UserController {
 
     @GetMapping("/api/v1/users")
     public ResponseEntity<List<User>> getUsers() {
+        logger.info(String.format("Executing getUser request"));
+        logger.debug(String.format("Executing getUser request"));
+        logger.error(String.format("Executing getUser request"));
         List<User> userList = new ArrayList<>();
-//        User user = new User(1,"ABC");
-//        User user1 = new User(2,"ABC");
-//        userList.add(user1);
-//        userList.add(user);
-        userList = userService.getAllUsers();
+        User user = new User(1,"ABC");
+        User user1 = new User(2,"ABC");
+        userList.add(user1);
+        userList.add(user);
+        //userList = userService.getAllUsers();
         return ResponseEntity.accepted().body(userList);
     }
 
