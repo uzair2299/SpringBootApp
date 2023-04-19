@@ -57,7 +57,6 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             System.out.println("User - " + user);
-            List<User> userList = new ArrayList<>();
             userRepository.save(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
