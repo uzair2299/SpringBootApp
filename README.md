@@ -39,7 +39,20 @@ spring.jpa.properties.hibernate.globally_quoted_identifiers=true
 
 Once the build is complete, you should see a message in the terminal indicating that the build was successful, and the packaged JAR file will be located in the target/ directory of your project.
 
-</br>
+<h1>Running a JAR File</h1>
+
+1. Open a terminal or command prompt.
+2. Navigate to the directory where the JAR file is located.
+3. Enter the following command: `java -jar <filename>.jar` 
+4. Replace '<filename>' with the name of the JAR file you want to run, including the .jar extension.
+
+    
+<h1>Running a JAR with profile</h1>
+To run a Spring Boot JAR with a specific profile, you can use the following command: 
+    
+`java -jar -Dspring.profiles.active=profile filename.jar`
+
+Replace <profile> with the name of the profile you want to use, and <filename> with the name of your JAR file, including the .jar extension.
 
 <h1>API Endpoints</h1>
 
