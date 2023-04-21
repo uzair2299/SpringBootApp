@@ -3,7 +3,6 @@ package com.example.SprintBootAppWithSQL.controller;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.services.UserService;
-import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    jwtImpl jwt;
     @Autowired
     UserService userService;
 
@@ -31,7 +27,6 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers() {
         try {
             logger.info(String.format("Executing getUser request"));
-            jwt.createToken();
             List<User> userList = new ArrayList<>();
             userList = userService.getAllUsers();
             if (userList.isEmpty()) {
@@ -72,11 +67,11 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable("id") int userId) {
         System.out.println("User Id - " + userId);
         List<User> userList = new ArrayList<>();
-        User user = new User(1, "ABC");
-        User user1 = new User(2, "ABC");
-        userList.add(user1);
-        userList.add(user);
-        return ResponseEntity.accepted().body(user);
+//        //User user = new User(UUID.randomUUID(), "ABC");
+//        User user1 = new User(UUID.randomUUID(), "ABC");
+//        userList.add(user1);
+//        userList.add(user);
+        return ResponseEntity.accepted().body(new User());
     }
 
     @DeleteMapping("/api/v1/users/{id}")

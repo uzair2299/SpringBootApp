@@ -1,6 +1,6 @@
 package com.example.SprintBootAppWithSQL.services.jwt;
 
-import com.example.SprintBootAppWithSQL.controller.UserController;
+import com.example.SprintBootAppWithSQL.dto.JwtDto;
 import com.example.SprintBootAppWithSQL.props.jwtProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,9 +18,10 @@ public class jwtImpl implements jwt {
     Logger logger = LoggerFactory.getLogger(jwtImpl.class);
     @Autowired
     jwtProperties jwtProperties;
+    @Autowired JwtDto jwtDto;
 
     @Override
-    public String createToken() {
+    public JwtDto createToken() {
         logger.info("jwt private key " + jwtProperties.getPrivateKey());
         logger.info("jwt audience " + jwtProperties.getAudience());
         logger.info("jwt issuer " + jwtProperties.getIssuer());
@@ -33,6 +34,7 @@ public class jwtImpl implements jwt {
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getPrivateKey())
                 .compact();
         logger.info("jwt token - " + jwtToken);
-        return null;
+        jwtDto.setToken(jwtToken);
+        return jwtDto;
     }
 }
