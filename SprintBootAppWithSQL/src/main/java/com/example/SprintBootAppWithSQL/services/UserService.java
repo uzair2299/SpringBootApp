@@ -1,4 +1,4 @@
-package com.example.SprintBootAppWithSQL.service;
+package com.example.SprintBootAppWithSQL.services;
 
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;

@@ -2,7 +2,8 @@ package com.example.SprintBootAppWithSQL.controller;
 
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
-import com.example.SprintBootAppWithSQL.service.UserService;
+import com.example.SprintBootAppWithSQL.services.UserService;
+import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    jwtImpl jwt;
+    @Autowired
     UserService userService;
 
 
@@ -28,6 +31,7 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers() {
         try {
             logger.info(String.format("Executing getUser request"));
+            jwt.createToken();
             List<User> userList = new ArrayList<>();
             userList = userService.getAllUsers();
             if (userList.isEmpty()) {
