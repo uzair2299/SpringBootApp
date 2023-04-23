@@ -26,4 +26,9 @@ public class jwtProperties {
     @Setter
     @Value("${jwt.expiry}")
     private Integer expiry;
+
+    @Getter
+    @Setter
+    @Value("${jwt.cookie.name}")
+    private String cookieName;
 }

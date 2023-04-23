@@ -35,8 +35,4 @@ public class User {
     private String primaryPhone;
     private String secondaryPhone;
     private String workPhone;
-
-
-
-
 }

@@ -67,6 +67,13 @@
             <version>2.2.5-b10</version>
         </dependency>
 
+        <!--required for web security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>
