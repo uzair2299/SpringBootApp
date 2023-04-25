@@ -1,7 +1,9 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
+import com.example.SprintBootAppWithSQL.services.RoleService;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -21,6 +21,8 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    RoleService roleService;
 
 
     @GetMapping("/api/v1/users")
@@ -56,8 +58,11 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             System.out.println("User - " + user);
+
+            List<Role> roles = roleService.getEntitiesByIds(user.getRolesId());
+            user.setRoles(roles);
             userRepository.save(user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            return new ResponseEntity<>(new User(), HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -33,6 +34,9 @@ public class User {
     private String primaryPhone;
     private String secondaryPhone;
     private String workPhone;
+    @Transient
+    private List<Long> rolesId;
+
     @ManyToMany
     @JoinTable(
             name = "UserRoles",

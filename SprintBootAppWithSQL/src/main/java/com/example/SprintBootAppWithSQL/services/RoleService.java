@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class RoleService {
@@ -27,4 +29,8 @@ public class RoleService {
     public Long getRolesCount(){
         return roleRepository.count();
     }
+    public List<Role> getEntitiesByIds(List<Long> ids) {
+        return roleRepository.findByIdIn(ids);
+    }
+
 }
