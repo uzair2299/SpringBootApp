@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -21,12 +23,29 @@ public class DataLoader implements CommandLineRunner {
         try {
           Long count =  roleService.getRolesCount();
             if (count == 0) {
+                List<Role> roleList = new ArrayList<>();
                 Role role = new Role();
                 role.setRoleName("Admin");
                 role.setCreatedAt(new Date());
                 role.setUpdatedAt(new Date());
                 role.setDescription("Description");
-                roleService.createRole(role);
+
+                Role superAdmin = new Role();
+                superAdmin.setRoleName("Super Admin");
+                superAdmin.setCreatedAt(new Date());
+                superAdmin.setUpdatedAt(new Date());
+                superAdmin.setDescription("This role has full control over all aspects of the application and can manage other admins");
+
+                Role userAdministrator = new Role();
+                userAdministrator.setRoleName("User Administrator");
+                userAdministrator.setCreatedAt(new Date());
+                userAdministrator.setUpdatedAt(new Date());
+                userAdministrator.setDescription("This role is responsible for managing user accounts, including creating and deleting accounts, resetting passwords, and managing user permissions");
+
+                roleList.add(role);
+                roleList.add(superAdmin);
+                roleList.add(userAdministrator);
+                roleService.saveAll(roleList);
             }
         } catch (Exception e) {
             //throw e;

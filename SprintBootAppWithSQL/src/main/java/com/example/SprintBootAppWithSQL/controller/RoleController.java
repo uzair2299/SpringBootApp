@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.dto.RoleDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
@@ -13,23 +14,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class RoleController {
     Logger logger = LoggerFactory.getLogger(RoleController.class);
-    //@Autowired
-    //UserRepository userRepository;
     @Autowired
     RoleService roleService;
 
 
     @GetMapping("/api/v1/roles")
-    public ResponseEntity<List<Role>> getRoles() {
+    public ResponseEntity<List<RoleDto>> getRoles() {
         try {
             logger.info(String.format("Executing getUser request"));
-            List<Role> rolesList = new ArrayList<>();
+            List<RoleDto> rolesList;
             rolesList = roleService.getAllRoles();
             if (rolesList.isEmpty()) {
                 return ResponseEntity.noContent().build();
@@ -54,17 +54,19 @@ public class RoleController {
 //        }
 //    }
 //
-//    @PostMapping("/api/v1/users/")
-//    public ResponseEntity<User> createUser(@RequestBody User user) {
-//        try {
-//            System.out.println("User - " + user);
-//            userRepository.save(user);
-//            return new ResponseEntity<>(user, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return ResponseEntity.internalServerError().build();
-//        }
-//    }
-//
+    @PostMapping("/api/v1/roles")
+    public ResponseEntity<RoleDto> createRole(@RequestBody RoleDto roleDto) {
+        try {
+            logger.info(String.format("roleDto - " + roleDto));
+            roleDto.setCreatedAt(new Date());
+            roleDto.setUpdatedAt(new Date());
+            RoleDto role = roleService.createRole(roleDto);
+            return new ResponseEntity<>(role, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 //    @PutMapping("/api/v1/users/{id}")
 //    public ResponseEntity<User> updateUser(@PathVariable("id") int userId) {
 //        System.out.println("User Id - " + userId);
