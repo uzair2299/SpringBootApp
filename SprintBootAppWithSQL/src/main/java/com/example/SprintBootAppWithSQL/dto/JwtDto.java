@@ -11,4 +11,5 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtDto {
     private String token;
+    private String refreshToken;
 }

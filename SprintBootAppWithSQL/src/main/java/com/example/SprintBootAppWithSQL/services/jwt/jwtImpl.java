@@ -34,7 +34,16 @@ public class jwtImpl implements jwt {
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getPrivateKey())
                 .compact();
         logger.info("jwt token - " + jwtToken);
+
+        String refreshToken = Jwts.builder()
+                .setId(UUID.randomUUID().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefreshTokenExpiry()))
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getPrivateKey())
+                .compact();
+
         jwtDto.setToken(jwtToken);
+        jwtDto.setRefreshToken(refreshToken);
         return jwtDto;
     }
 }
