@@ -1,11 +1,14 @@
 package com.example.SprintBootAppWithSQL.defaultData;
 
 import com.example.SprintBootAppWithSQL.entities.Role;
+import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.RoleService;
+import com.example.SprintBootAppWithSQL.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,12 +20,22 @@ public class DataLoader implements CommandLineRunner {
     Logger logger = LoggerFactory.getLogger(DataLoader.class);
     @Autowired
     RoleService roleService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
         try {
           Long count =  roleService.getRolesCount();
             if (count == 0) {
+                User user = new User();
+                user.setPassword(passwordEncoder.encode("testing"));
+                user.setUserName("testing");
+                userService.saveUser(user);
+
+
                 List<Role> roleList = new ArrayList<>();
                 Role role = new Role();
                 role.setRoleName("Admin");

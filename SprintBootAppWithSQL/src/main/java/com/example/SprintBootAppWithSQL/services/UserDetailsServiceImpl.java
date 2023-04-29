@@ -12,7 +12,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = new User();
-        user.setId(UUID.randomUUID());
+        user.setId(1);
         user.setEmail("ABC");
         user.setPassword("XYZ");
         return UserDetailsImpl.build(user);

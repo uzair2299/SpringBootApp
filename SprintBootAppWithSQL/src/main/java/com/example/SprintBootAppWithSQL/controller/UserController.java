@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") int userId) {
+    public ResponseEntity<User> getUser(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);
             Optional<User> user = userRepository.findById(userId);
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @DeleteMapping("/api/v1/users/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") int userId) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);
             userRepository.deleteById(userId);

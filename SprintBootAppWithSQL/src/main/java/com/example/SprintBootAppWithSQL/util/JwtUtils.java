@@ -4,11 +4,14 @@ import com.example.SprintBootAppWithSQL.props.jwtProperties;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+
+import java.io.IOException;
 
 @Component
 public class JwtUtils {
@@ -24,11 +27,13 @@ public class JwtUtils {
         }
     }
 
-    public boolean validateJwtToken(String authToken) {
+
+    public boolean validateJwtToken(String authToken,HttpServletResponse response) throws IOException {
         try {
             Jwts.parser().setSigningKey(jwtProperties.getPrivateKey()).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
+
             logger.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

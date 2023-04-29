@@ -45,7 +45,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String jwtToken = authHeader.substring(TOKEN_PREFIX.length());
 
 
-        if (jwtUtils.validateJwtToken(jwtToken)) {
+        if (jwtUtils.validateJwtToken(jwtToken,response)) {
             // Get the user details from the token
             UserDetails userDetails = userDetailsService.loadUserByUsername("ABC");
 
@@ -55,6 +55,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
         filterChain.doFilter(request, response);
     }
 }

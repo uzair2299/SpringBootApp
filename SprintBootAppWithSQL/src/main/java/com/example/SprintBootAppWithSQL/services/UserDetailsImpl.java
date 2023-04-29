@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private UUID id;
+    private long id;
 
     private String username;
 
@@ -19,7 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    public UserDetailsImpl(UUID id,String email, String password) {
+    public UserDetailsImpl(long id,String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
