@@ -29,6 +29,7 @@ public class User {
     private Date dateJoined;
     private Date lastLogin;
     private Boolean isActive;
+    private Boolean isLocked;
     private String profilePicture;
     private String bio;
     private String primaryPhone;
