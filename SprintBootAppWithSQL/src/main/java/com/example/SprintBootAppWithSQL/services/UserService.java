@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,6 +23,7 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<User>();
@@ -48,6 +50,19 @@ public class UserService {
             throw new BadCredentialsException("Invalid username/password");
         }
         UserDto user = MapperUtil.mapObject(result, UserDto.class);
+        return user;
+    }
+
+    public UserDto updateUser(UserDto userDto, long id) {
+
+        User result = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        result.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        result.setEmail(userDto.getEmail());
+        result.setUserName(userDto.getUserName());
+        result.setFirstName(userDto.getFirstName());
+        result.setLastName(userDto.getLastName());
+        UserDto user = MapperUtil.mapObject(result, UserDto.class);
+        userRepository.saveAndFlush(result);
         return user;
     }
 }

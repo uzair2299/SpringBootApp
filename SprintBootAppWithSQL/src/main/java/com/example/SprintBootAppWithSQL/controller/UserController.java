@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
@@ -68,15 +69,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/api/v1/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int userId) {
-        System.out.println("User Id - " + userId);
-        List<User> userList = new ArrayList<>();
-//        //User user = new User(UUID.randomUUID(), "ABC");
-//        User user1 = new User(UUID.randomUUID(), "ABC");
-//        userList.add(user1);
-//        userList.add(user);
-        return ResponseEntity.accepted().body(new User());
+    @PutMapping("/api/v1/users/info/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserDto user) {
+        UserDto userDto =  userService.updateUser(user,id);
+        return ResponseEntity.ok("User updated successfully.");
     }
 
     @DeleteMapping("/api/v1/users/{id}")
