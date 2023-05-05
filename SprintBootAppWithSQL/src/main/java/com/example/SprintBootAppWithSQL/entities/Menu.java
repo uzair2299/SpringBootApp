@@ -19,7 +19,15 @@ public class Menu {
     private Long id;
     private String name;
     private String link;
-    private Long parentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_parent_menu_id"))
+    private Menu parentMenu;
     private int status;
 
+    public Menu(Long id, String name, String link, int status) {
+        this.id = id;
+        this.name = name;
+        this.link = link;
+        this.status = status;
+    }
 }
