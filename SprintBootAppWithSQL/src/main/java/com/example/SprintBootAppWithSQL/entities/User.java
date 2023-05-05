@@ -38,7 +38,7 @@ public class User {
     @Transient
     private List<Long> rolesId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),

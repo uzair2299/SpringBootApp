@@ -30,18 +30,6 @@ public class DataLoader implements CommandLineRunner {
         try {
           Long count =  roleService.getRolesCount();
             if (count == 0) {
-                User user = new User();
-                user.setPassword(passwordEncoder.encode("testing"));
-                user.setUserName("testing");
-                user.setEmail("testing@gmail.com");
-                user.setBio("testing");
-                user.setFirstName("testing");
-                user.setLastName("testing");
-                user.setIsActive(true);
-                user.setIsLocked(false);
-                userService.saveUser(user);
-
-
                 List<Role> roleList = new ArrayList<>();
                 Role role = new Role();
                 role.setRoleName("Admin");
@@ -65,6 +53,24 @@ public class DataLoader implements CommandLineRunner {
                 roleList.add(superAdmin);
                 roleList.add(userAdministrator);
                 roleService.saveAll(roleList);
+
+
+                List<Role> roles = roleService.getAllRoles_();
+
+                User user = new User();
+                user.setPassword(passwordEncoder.encode("testing"));
+                user.setUserName("testing");
+                user.setEmail("testing@gmail.com");
+                user.setBio("testing");
+                user.setFirstName("testing");
+                user.setLastName("testing");
+                user.setIsActive(true);
+                user.setIsLocked(false);
+                user.setRoles(roles);
+                userService.saveUser(user);
+
+
+
             }
         } catch (Exception e) {
             //throw e;

@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public UserDto getUserByUserName(UserDto userDto) {
-        User result = userRepository.findByUserNameAndPassword(userDto.getUserName());
+        User result = userRepository.findByUserName(userDto.getUserName());
         if (result == null) {
             throw new UsernameNotFoundException("User not found");
         }

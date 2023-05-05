@@ -29,6 +29,12 @@ public class RoleService {
         return roleDtoList;
     }
 
+
+    public List<Role> getAllRoles_() {
+        List<Role> roleList = roleRepository.findAll();
+        return roleList;
+    }
+
     public RoleDto createRole(RoleDto roleDto) {
         Role role =  MapperUtil.mapObject(roleDto,Role.class);
         Role savedRole = roleRepository.save(role);
