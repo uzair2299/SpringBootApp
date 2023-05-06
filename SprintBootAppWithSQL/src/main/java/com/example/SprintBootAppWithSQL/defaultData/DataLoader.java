@@ -4,6 +4,7 @@ import com.example.SprintBootAppWithSQL.entities.Designation;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.entities.Menu;
+import com.example.SprintBootAppWithSQL.services.DesignationService;
 import com.example.SprintBootAppWithSQL.services.MenuService;
 import com.example.SprintBootAppWithSQL.services.RoleService;
 import com.example.SprintBootAppWithSQL.services.UserService;
@@ -25,6 +26,9 @@ public class DataLoader implements CommandLineRunner {
     RoleService roleService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    DesignationService designationService;
 
     @Autowired
     MenuService menuService;
@@ -99,7 +103,8 @@ public class DataLoader implements CommandLineRunner {
                 menuService.saveMenu(childMenu1);
                 menuService.saveMenu(childMenu2);
 
-
+                List<Designation> designations = addDesignation();
+                designationService.saveAllDesignations(designations);
 
             }
         } catch (Exception e) {
@@ -108,7 +113,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    private void addDesignation(){
+    private List<Designation> addDesignation(){
         List<Designation> designations = new ArrayList<>();
         designations.add(new Designation("CEO"));
         designations.add(new Designation("COO"));
@@ -149,5 +154,6 @@ public class DataLoader implements CommandLineRunner {
         designations.add(new Designation("Compliance Officer"));
         designations.add(new Designation("Project Manager"));
         designations.add(new Designation("Product Manager"));
+        return designations;
     }
 }
