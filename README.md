@@ -76,5 +76,38 @@ Example request body:
 }
 ```
 
-
+# Annotations
+## A
+## B
+## C
+`@Column`
+## D
+## E
+`@Entity`
+## F
+## G
+`@GeneratedValue`
+## H
+## I
+`@Id`
+## J
+`@JoinColumn`
+## K
+## L
+## M
+`@ManyToOne`
+## N
+## O
+## P
+## Q
+## R
+## S
+## T
+`@Table`
+## U
+## V
+## W
+## X
+## Y
+## Z
 
