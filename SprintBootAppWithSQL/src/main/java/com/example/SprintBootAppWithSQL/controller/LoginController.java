@@ -6,6 +6,7 @@ import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import com.sun.xml.bind.v2.TODO;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,6 @@ public class LoginController {
     public ResponseEntity<JwtDto> login(@RequestBody UserDto user) {
         try {
             UserDto result = userService.getUserByUserName(user);
-
             return new ResponseEntity<>(jwt.createToken(), HttpStatus.OK);
         } catch (BadCredentialsException | DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JwtDto().error(e.getMessage()));
