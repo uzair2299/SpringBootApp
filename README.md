@@ -89,7 +89,7 @@ Example request body:
 `@GeneratedValue`
 ## H
 ## I
-`@Id`
+`@Id :`  used to mark a field or property as primary key.
 ## J
 `@JoinColumn`
 ## K
