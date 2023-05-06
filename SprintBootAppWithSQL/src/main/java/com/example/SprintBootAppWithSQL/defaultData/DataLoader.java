@@ -1,13 +1,7 @@
 package com.example.SprintBootAppWithSQL.defaultData;
 
-import com.example.SprintBootAppWithSQL.entities.Designation;
-import com.example.SprintBootAppWithSQL.entities.Role;
-import com.example.SprintBootAppWithSQL.entities.User;
-import com.example.SprintBootAppWithSQL.entities.Menu;
-import com.example.SprintBootAppWithSQL.services.DesignationService;
-import com.example.SprintBootAppWithSQL.services.MenuService;
-import com.example.SprintBootAppWithSQL.services.RoleService;
-import com.example.SprintBootAppWithSQL.services.UserService;
+import com.example.SprintBootAppWithSQL.entities.*;
+import com.example.SprintBootAppWithSQL.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +26,17 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     MenuService menuService;
+
+    @Autowired
+    DepartmentService departmentService;
     @Autowired
     PasswordEncoder passwordEncoder;
-
 
 
     @Override
     public void run(String... args) {
         try {
-          Long count =  roleService.getRolesCount();
+            Long count = roleService.getRolesCount();
             if (count == 0) {
                 List<Role> roleList = new ArrayList<>();
                 Role role = new Role();
@@ -106,6 +102,9 @@ public class DataLoader implements CommandLineRunner {
                 List<Designation> designations = addDesignation();
                 designationService.saveAllDesignations(designations);
 
+                List<Department> departments = addDepartment();
+                departmentService.saveAllDepartments(departments);
+
             }
         } catch (Exception e) {
             //throw e;
@@ -113,7 +112,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    private List<Designation> addDesignation(){
+    private List<Designation> addDesignation() {
         List<Designation> designations = new ArrayList<>();
         designations.add(new Designation("CEO"));
         designations.add(new Designation("COO"));
@@ -155,5 +154,20 @@ public class DataLoader implements CommandLineRunner {
         designations.add(new Designation("Project Manager"));
         designations.add(new Designation("Product Manager"));
         return designations;
+    }
+
+    private List<Department> addDepartment() {
+        List<Department> departments = new ArrayList<>();
+        departments.add(new Department("Human Resources", "Responsible for managing employee recruitment, training, benefits, and other personnel-related issues."));
+        departments.add(new Department("Finance", "Responsible for managing the organization's financial resources, including budgeting, accounting, and financial reporting."));
+        departments.add(new Department("Marketing", "Responsible for promoting the organization's products or services, conducting market research, and managing the organization's branding and public image."));
+        departments.add(new Department("Sales", "Responsible for generating revenue for the organization by selling its products or services to customers."));
+        departments.add(new Department("Information Technology (IT)", "Responsible for managing the organization's computer systems, software, and other technology-related resources."));
+        departments.add(new Department("Operations", "Responsible for overseeing the day-to-day activities of the organization, including production, logistics, and supply chain management."));
+        departments.add(new Department("Legal", "Responsible for ensuring the organization operates in compliance with relevant laws and regulations, and for handling legal disputes and contracts."));
+        departments.add(new Department("Customer Service", "Responsible for handling customer inquiries, complaints, and support issues."));
+        departments.add(new Department("Research and Development", "Responsible for developing new products, services, and technologies to keep the organization competitive."));
+        departments.add(new Department("Quality Assurance", "Responsible for ensuring that the organization's products or services meet the required quality standards."));
+        return departments;
     }
 }
