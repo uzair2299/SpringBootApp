@@ -50,7 +50,7 @@ Once the build is complete, you should see a message in the terminal indicating 
 <h1>Running a JAR with profile</h1>
 To run a Spring Boot JAR with a specific profile, you can use the following command: 
     
-`java -jar -Dspring.profiles.active=profile filename.jar`
+`java -jar "-Dspring.profiles.active=profile" filename.jar`
 
 Replace <profile> with the name of the profile you want to use, and <filename> with the name of your JAR file, including the .jar extension.
 
