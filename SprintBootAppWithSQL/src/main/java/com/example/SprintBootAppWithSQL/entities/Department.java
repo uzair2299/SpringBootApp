@@ -3,6 +3,7 @@ package com.example.SprintBootAppWithSQL.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "departments")
@@ -48,6 +49,9 @@ public class Department {
     @JoinColumn(name = "parent_department_id")
     private Department parentDepartment;
 
+
+    @OneToMany(mappedBy = "department")
+    private List<Employee> employees;
     public Department(String name, String description) {
         this.name = name;
         this.description = description;
