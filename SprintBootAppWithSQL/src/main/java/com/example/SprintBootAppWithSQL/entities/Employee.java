@@ -51,4 +51,11 @@ public class Employee {
     @JoinColumn(name="work_type_id")
     private WorkType workType;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmployeeLeaveBalance> leaveBalances;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmployeeLeaveRequest> leaveRequests;
+
+
 }
