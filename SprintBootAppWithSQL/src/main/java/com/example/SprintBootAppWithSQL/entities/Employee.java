@@ -57,5 +57,16 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmployeeLeaveRequest> leaveRequests;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Salary> salaries;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Payroll> payrolls;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Increment> increments;
+
+    @ManyToOne
+    @JoinColumn(name = "designationId")
+    private Designation designation;
 }

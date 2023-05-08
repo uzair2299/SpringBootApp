@@ -29,6 +29,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     DepartmentService departmentService;
+
+    @Autowired
+    DocumentTypeService documentTypeService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -105,6 +108,9 @@ public class DataLoader implements CommandLineRunner {
                 List<Department> departments = addDepartment();
                 departmentService.saveAllDepartments(departments);
 
+                List<DocumentType> documentTypes = addDocumentType();
+                documentTypeService.saveAllDocumentType(documentTypes);
+
             }
         } catch (Exception e) {
             //throw e;
@@ -169,5 +175,17 @@ public class DataLoader implements CommandLineRunner {
         departments.add(new Department("Research and Development", "Responsible for developing new products, services, and technologies to keep the organization competitive."));
         departments.add(new Department("Quality Assurance", "Responsible for ensuring that the organization's products or services meet the required quality standards."));
         return departments;
+    }
+
+    private List<DocumentType> addDocumentType(){
+        List<DocumentType> documentTypes = new ArrayList<>();
+        documentTypes.add(new DocumentType("Offer letters","These are documents that the company issues to new employees, outlining the terms and conditions of their employment, including job title, salary, benefits, and start date."));
+        documentTypes.add(new DocumentType("Employment contracts","These are legal agreements between the company and its employees that formalize the terms and conditions of their employment, including job responsibilities, compensation, benefits, and termination provisions."));
+        documentTypes.add(new DocumentType("Disciplinary actions","These are documents that the company may issue to employees who have violated company policies or engaged in misconduct. Disciplinary actions may include verbal or written warnings, suspension, or termination."));
+        documentTypes.add(new DocumentType("Payroll records","These are documents that track the compensation and benefits paid to employees, including salary, overtime, bonuses, and deductions."));
+        documentTypes.add(new DocumentType("Resignation letters","These are documents that employees may submit to inform the company of their intention to resign from their position. Resignation letters typically include the employee's name, job title, and date of resignation."));
+        documentTypes.add(new DocumentType("Policies and procedures","These are documents that outline the company's rules, guidelines, and processes for various aspects of its operations, such as employee conduct, safety, and data privacy. Policies and procedures may be used to ensure compliance with legal and regulatory requirements, to maintain consistency across the organization, and to promote best practices."));
+        documentTypes.add(new DocumentType("Resumes or CVs","hhh"));
+        return  documentTypes;
     }
 }

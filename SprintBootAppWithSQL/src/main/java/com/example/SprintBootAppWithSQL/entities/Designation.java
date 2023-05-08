@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -29,5 +31,8 @@ public class Designation {
     public Designation(String name){
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "designation")
+    private List<Employee> employees;
 
 }
