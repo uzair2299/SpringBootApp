@@ -33,6 +33,8 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     DocumentTypeService documentTypeService;
     @Autowired
+    WorkTypeService workTypeService;
+    @Autowired
     PasswordEncoder passwordEncoder;
 
 
@@ -111,6 +113,10 @@ public class DataLoader implements CommandLineRunner {
                 List<DocumentType> documentTypes = addDocumentType();
                 documentTypeService.saveAllDocumentType(documentTypes);
 
+                List<WorkType> workTypes = addWorkType();
+                workTypeService.saveAllWorkTypes(workTypes);
+
+
             }
         } catch (Exception e) {
             //throw e;
@@ -187,5 +193,12 @@ public class DataLoader implements CommandLineRunner {
         documentTypes.add(new DocumentType("Policies and procedures","These are documents that outline the company's rules, guidelines, and processes for various aspects of its operations, such as employee conduct, safety, and data privacy. Policies and procedures may be used to ensure compliance with legal and regulatory requirements, to maintain consistency across the organization, and to promote best practices."));
         documentTypes.add(new DocumentType("Resumes or CVs","hhh"));
         return  documentTypes;
+    }
+
+    private  List<WorkType> addWorkType(){
+        List<WorkType> workTypes = new ArrayList<>();
+        workTypes.add(new WorkType("Full Time"));
+        workTypes.add(new WorkType("Part Time"));
+        return workTypes;
     }
 }

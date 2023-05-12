@@ -67,6 +67,6 @@ public class Employee {
     private List<Increment> increments;
 
     @ManyToOne
-    @JoinColumn(name = "designationId")
+    @JoinColumn(name = "designation_Id")
     private Designation designation;
 }

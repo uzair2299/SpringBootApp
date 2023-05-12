@@ -23,7 +23,11 @@ public class WorkType {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "workType")
+    @OneToMany(mappedBy = "workType" ,fetch = FetchType.LAZY)
     private List<Employee> employees;
+
+    public WorkType(String name) {
+        this.name = name;
+    }
 
 }
