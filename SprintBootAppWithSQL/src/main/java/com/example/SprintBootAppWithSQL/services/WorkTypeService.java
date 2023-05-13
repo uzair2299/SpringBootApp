@@ -1,6 +1,7 @@
 package com.example.SprintBootAppWithSQL.services;
 
 import com.example.SprintBootAppWithSQL.dto.DepartmentDto;
+import com.example.SprintBootAppWithSQL.dto.WorkTypeDto;
 import com.example.SprintBootAppWithSQL.entities.Department;
 import com.example.SprintBootAppWithSQL.entities.WorkType;
 import com.example.SprintBootAppWithSQL.repository.DepartmentRepository;
@@ -17,10 +18,11 @@ public class WorkTypeService {
     @Autowired
     WorkTypeRepository workTypeRepository;
 
-//    public List<Department> getAllRoles() {
-//        List<Menu> menuList = departmentRepository.findAll();
-//        return menuList;
-//    }
+    public List<WorkTypeDto> getAllWorkType() {
+        List<WorkType> workTypes = workTypeRepository.findAll();
+        List<WorkTypeDto> workTypeDtos = MapperUtil.mapList(workTypes,WorkTypeDto.class);
+        return workTypeDtos;
+    }
 
 //    public Menu saveMenu(Menu menu) {
 //        return menuRepository.save(menu);

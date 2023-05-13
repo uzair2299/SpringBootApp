@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.services;
 
+import com.example.SprintBootAppWithSQL.controller.LoginController;
 import com.example.SprintBootAppWithSQL.dto.EmployeeDto;
 import com.example.SprintBootAppWithSQL.entities.Department;
 import com.example.SprintBootAppWithSQL.entities.Designation;
@@ -10,6 +11,8 @@ import com.example.SprintBootAppWithSQL.repository.DesignationRepository;
 import com.example.SprintBootAppWithSQL.repository.EmployeeRepository;
 import com.example.SprintBootAppWithSQL.repository.WorkTypeRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import java.util.Optional;
 
 @Service
 public class EmployeeService {
+    Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
@@ -35,8 +39,9 @@ public class EmployeeService {
 
         Optional<Department> department = departmentRepository.findById(employeeDto.getDepartment_id());
         Optional<Designation> designation = designationRepository.findById(employeeDto.getDesignation_id());
+        logger.info("going to get work type start");
         Optional<WorkType> workType  = workTypeRepository.findById(employeeDto.getWork_type_id());
-
+        logger.info("going to get work type end");
         Employee employee = MapperUtil.mapObject(employeeDto, Employee.class);
 
         if (department.isPresent()) {
@@ -47,7 +52,10 @@ public class EmployeeService {
         }
 
         if (workType.isPresent()) {
-            employee.setWorkType(workType.get());
+            WorkType w =  new WorkType();
+            w.setId(employeeDto.getWork_type_id());
+
+            employee.setWorkType(w);
         }
 
 

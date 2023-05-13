@@ -199,6 +199,13 @@ public class DataLoader implements CommandLineRunner {
         List<WorkType> workTypes = new ArrayList<>();
         workTypes.add(new WorkType("Full Time"));
         workTypes.add(new WorkType("Part Time"));
+        workTypes.add(new WorkType("Freelance"));
+        workTypes.add(new WorkType("Remote"));
+        workTypes.add(new WorkType("Intern"));
+        workTypes.add(new WorkType("Consultant"));
+        workTypes.add(new WorkType("Contract"));
+        workTypes.add(new WorkType("Temporary"));
+        workTypes.add(new WorkType("Volunteer"));
         return workTypes;
     }
 }
