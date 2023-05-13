@@ -17,7 +17,9 @@
 								"exec": [
 									"const jsonData = pm.response.json();\r",
 									"const token = jsonData.token;\r",
-									"pm.variables.set(\"jwtToken\", token);\r",
+									"pm.collectionVariables.set(\"jwtToken\", token)\r",
+									"\r",
+									"console.log(\" getting token \" + pm.variables.get(\"jwtToken\"))\r",
 									""
 								],
 								"type": "text/javascript"
@@ -37,17 +39,9 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/api/v1/login/",
-							"protocol": "http",
+							"raw": "{{Auth_URL}}",
 							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"login",
-								""
+								"{{Auth_URL}}"
 							]
 						}
 					},
@@ -62,7 +56,20 @@
 					"name": "TestingGet",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/test/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"test",
+								""
+							]
+						}
 					},
 					"response": []
 				}
@@ -73,9 +80,44 @@
 			"item": [
 				{
 					"name": "GetRoles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"roles"
+							]
+						}
 					},
 					"response": []
 				},
@@ -96,7 +138,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 10,\r\n    \"roleName\": \"admin\",\r\n    \"description\": \"Administrator role\",\r\n    \"createdAt\": \"2022-05-01T12:00:00Z\",\r\n    \"updatedAt\": \"2022-05-01T12:00:00Z\"\r\n}",
+							"raw": "{\r\n    \"roleName\": \"testing\",\r\n    \"description\": \"testing\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -122,44 +164,326 @@
 			]
 		},
 		{
-			"name": "GetUsers",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"name": "User",
+			"item": [
+				{
+					"name": "GetUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"testing1\",\r\n    \"firstName\": null,\r\n    \"lastName\": null,\r\n    \"password\": \"testing1\",\r\n    \"email\": \"testing1@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": null,\r\n    \"profilePicture\": null,\r\n    \"bio\": null,\r\n    \"primaryPhone\": null,\r\n    \"secondaryPhone\": null,\r\n    \"workPhone\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUserInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": null,\r\n    \"firstName\": \"uzair\",\r\n    \"lastName\": \"anwar\",\r\n    \"password\": \"testing\",\r\n    \"email\": \"testing@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": null,\r\n    \"profilePicture\": null,\r\n    \"bio\": null,\r\n    \"primaryPhone\": null,\r\n    \"secondaryPhone\": null,\r\n    \"workPhone\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/users/info/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"info",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/103",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"103"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "PostUser",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"name": "Employee",
+			"item": [
+				{
+					"name": "GetUsers",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "PostEmployee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"testing employee\",\r\n    \"firstName\": \"firstName\",\r\n    \"lastName\": \"lastName\",\r\n    \"password\": \"testing1\",\r\n    \"email\": \"testing1@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": true,\r\n    \"isLocked\":true,\r\n    \"profilePicture\": null,\r\n    \"bio\": \"bio\",\r\n    \"primaryPhone\": \"+923366312299\",\r\n    \"secondaryPhone\": \"+923366312299\",\r\n    \"workPhone\": \"+923366312299\",\r\n    \"department_id\":1,\r\n    \"work_type_id\" :2,\r\n    \"designation_id\":10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUserInfo",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "UpdateUserInfo",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"name": "DocumentType",
+			"item": [
+				{
+					"name": "GetDocumentTypes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/documentTypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"documentTypes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "GetUserById",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "DeleteUser",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"name": "BankAccount",
+			"item": [
+				{
+					"name": "PostBankAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"accountNumber\": \"123456789\",\r\n  \"routingNumber\": \"987654321\",\r\n  \"isPrimary\": true,\r\n  \"employeeId\":1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bankAccount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bankAccount"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [

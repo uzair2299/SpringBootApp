@@ -64,4 +64,13 @@ public class EmployeeService {
         result.setPassword("");
         return result;
     }
+
+    public EmployeeDto getEmployeeById(long id){
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()){
+            EmployeeDto employeeDto = MapperUtil.mapObject(employee,EmployeeDto.class);
+            return  employeeDto;
+        }
+        return null;
+    }
 }

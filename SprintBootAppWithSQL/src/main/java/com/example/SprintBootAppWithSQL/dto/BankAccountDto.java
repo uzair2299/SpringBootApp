@@ -9,5 +9,5 @@ public class BankAccountDto {
     private Long id;
     private String accountNumber;
     private String routingNumber;
-    private Employee employee;
+    private long employeeId;
 }

@@ -1,7 +1,15 @@
 package com.example.SprintBootAppWithSQL.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class BankAccount {
     @Id
@@ -13,6 +21,10 @@ public class BankAccount {
 
     @Column(name = "routing_number")
     private String routingNumber;
+
+    @Column(name = "is_primary")
+    private boolean isPrimary;
+
 
     @ManyToOne
     private Employee employee;
