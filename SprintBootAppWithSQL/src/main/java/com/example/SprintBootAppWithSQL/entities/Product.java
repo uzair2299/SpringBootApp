@@ -2,6 +2,8 @@ package com.example.SprintBootAppWithSQL.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Product {
 
@@ -18,4 +20,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "product_grade_id")
     private ProductGrade productGrade;
+
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetail;
 }
