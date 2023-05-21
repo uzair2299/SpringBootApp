@@ -26,11 +26,12 @@ public class jwtImpl implements jwt {
         logger.info("jwt audience " + jwtProperties.getAudience());
         logger.info("jwt issuer " + jwtProperties.getIssuer());
         logger.info("jwt expiry " + jwtProperties.getExpiry());
+        long expire  = (jwtProperties.getExpiry())/1000*60*60;
         String jwtToken = Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setAudience(jwtProperties.getAudience())
                 .setIssuer(jwtProperties.getIssuer())
-                .setExpiration(new Date((new Date()).getTime() + jwtProperties.getExpiry()))
+                .setExpiration(new Date((new Date()).getTime() + expire))
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getPrivateKey())
                 .compact();
         logger.info("jwt token - " + jwtToken);
