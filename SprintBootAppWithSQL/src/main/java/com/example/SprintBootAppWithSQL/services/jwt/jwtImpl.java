@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -21,7 +22,7 @@ public class jwtImpl implements jwt {
     @Autowired JwtDto jwtDto;
 
     @Override
-    public JwtDto createToken() {
+    public JwtDto createToken(Map<String,Object> claims) {
         logger.info("jwt private key " + jwtProperties.getPrivateKey());
         logger.info("jwt audience " + jwtProperties.getAudience());
         logger.info("jwt issuer " + jwtProperties.getIssuer());
@@ -29,6 +30,7 @@ public class jwtImpl implements jwt {
         long expire  = (jwtProperties.getExpiry())/1000*60*60;
         String jwtToken = Jwts.builder()
                 .setId(UUID.randomUUID().toString())
+                .setClaims(claims)
                 .setAudience(jwtProperties.getAudience())
                 .setIssuer(jwtProperties.getIssuer())
                 .setExpiration(new Date((new Date()).getTime() + expire))

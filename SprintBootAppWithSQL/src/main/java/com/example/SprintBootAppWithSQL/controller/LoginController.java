@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class LoginController {
     Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -42,7 +45,9 @@ public class LoginController {
     public ResponseEntity<JwtDto> login(@RequestBody UserDto user) {
         try {
             UserDto result = userService.getUserByUserName(user);
-            return new ResponseEntity<>(jwt.createToken(), HttpStatus.OK);
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userName","Testing");
+            return new ResponseEntity<>(jwt.createToken(claims), HttpStatus.OK);
         } catch (BadCredentialsException | DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JwtDto().error(e.getMessage()));
         } catch (LockedException e) {

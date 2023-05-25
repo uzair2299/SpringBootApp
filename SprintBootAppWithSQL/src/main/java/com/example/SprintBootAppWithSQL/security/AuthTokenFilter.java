@@ -35,8 +35,40 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         // Get the authorization header from the request
         String authHeader = request.getHeader(AUTH_HEADER);
 
+        String requestMethod = request.getMethod();
+        String requestURL = request.getRequestURL().toString();
+        String requestURI = request.getRequestURI();
+        String scheme = request.getScheme(); // http or https
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        String contextPath = request.getContextPath();
+
+        logger.info(String.format("authHeader - [%s]", authHeader));
+        logger.info(String.format("requestURL - [%s]", requestURL));
+        logger.info(String.format("requestURI - [%s]", requestURI));
+        logger.info(String.format("requestMethod - [%s]", requestMethod));
+        logger.info(String.format("scheme - [%s]", scheme));
+        logger.info(String.format("serverName - [%s]", serverName));
+        logger.info(String.format("serverPort - [%s]", serverPort));
+        logger.info(String.format("contextPath - [%s]", contextPath));
+
+        StringBuilder baseFQDN = new StringBuilder();
+        baseFQDN.append(scheme).append("://").append(serverName);
+        baseFQDN.append(":").append(serverPort);
+        baseFQDN.append(contextPath);
+        logger.info(String.format("baseFQDN", baseFQDN));
+
+
+        if (isLoginRequest(requestURL, requestURI)) {
+            filterChain.doFilter(request, response);
+            //The return; statement immediately exits the current method and returns from the filter. This ensures that the remaining lines of code in the filter method are not executed for the login request.
+            return;
+        }
+
         // If the header is null or doesn't start with "Bearer ", continue with the filter chain
         if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
+            //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //response.getWriter().write("Access is forbidden");
             filterChain.doFilter(request, response);
             return;
         }
@@ -45,8 +77,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String jwtToken = authHeader.substring(TOKEN_PREFIX.length());
 
 
-        if (jwtUtils.validateJwtToken(jwtToken,response)) {
+        if (jwtUtils.validateJwtToken(jwtToken, response)) {
             // Get the user details from the token
+            String userName = jwtUtils.extractClaims(jwtToken).get("userName", String.class);
+
             UserDetails userDetails = userDetailsService.loadUserByUsername("ABC");
 
             // Set the authentication object in the security context
@@ -55,7 +89,42 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+        // Check if the user has the required authority based on request method and URI
+        if (!hasAuthority(requestMethod, requestURI)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
         //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
         filterChain.doFilter(request, response);
     }
+
+    private boolean hasAuthority(String requestMethod, String requestURI) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)
+//                authentication.getAuthorities();
+//
+//        // Check if the user has the required authority based on request method and URI
+//        if (requestMethod.equalsIgnoreCase("GET") && authorities.contains(new SimpleGrantedAuthority("read"))) {
+//            return true;
+//        } else if ((requestMethod.equalsIgnoreCase("POST") || requestMethod.equalsIgnoreCase("PUT") ||
+//                requestMethod.equalsIgnoreCase("DELETE")) &&
+//                authorities.contains(new SimpleGrantedAuthority("write"))) {
+//            return true;
+//        }
+
+        return true;
+    }
+
+    private boolean isLoginRequest(String requestURL, String requestURI) {
+        // Check the request URL or URI for login-specific patterns
+        // You can customize this method based on your application's login URL patterns
+        //For example, if the URL of the current request is https://www.example.com/products?id=123, then:
+        //getRequestURL() would return: https://www.example.com/products
+        //getRequestURI() would return: /products
+        //It's important to note that the URL represents the complete address of a resource, while the URI represents the path or identifier that can be used to locate a resource.
+        return requestURL.contains("/login") || requestURI.contains("/login");
+    }
 }
+
