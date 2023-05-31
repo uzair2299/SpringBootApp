@@ -28,12 +28,14 @@ public class RoleController {
     @GetMapping("/api/v1/roles")
     public ResponseEntity<List<RoleDto>> getRoles() {
         try {
-            logger.info(String.format("Executing getUser request"));
+            logger.info(String.format("Executing getRoles request"));
             List<RoleDto> rolesList;
             rolesList = roleService.getAllRoles();
             if (rolesList.isEmpty()) {
+                logger.info(String.format("Leaving getRoles request - roles list is empty"));
                 return ResponseEntity.noContent().build();
             }
+            logger.info(String.format("Leaving getRoles request - with roles list"));
             return ResponseEntity.ok().body(rolesList);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

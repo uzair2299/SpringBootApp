@@ -2,12 +2,13 @@ package com.example.SprintBootAppWithSQL.services;
 
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.UUID;
 
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
     private long id;
@@ -19,10 +20,11 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    public UserDetailsImpl(long id,String email, String password) {
+    public UserDetailsImpl(long id, String email, String password, String userName) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.username = userName;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -30,7 +32,8 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getUserName()
         );
     }
 

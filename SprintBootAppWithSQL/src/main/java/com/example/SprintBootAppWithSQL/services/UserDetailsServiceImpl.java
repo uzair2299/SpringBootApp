@@ -10,11 +10,12 @@ import java.util.UUID;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = new User();
         user.setId(1);
         user.setEmail("ABC");
         user.setPassword("XYZ");
+        user.setUserName("testing");
         return UserDetailsImpl.build(user);
     }
 }

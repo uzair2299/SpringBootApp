@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.services;
 
+import com.example.SprintBootAppWithSQL.controller.LoginController;
 import com.example.SprintBootAppWithSQL.dto.RoleDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
@@ -8,7 +9,10 @@ import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -21,11 +25,15 @@ import java.util.UUID;
 public class RoleService {
     @Autowired
     RoleRepository roleRepository;
+    Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+    @Cacheable(value = "allDataCache")
     public List<RoleDto> getAllRoles() {
+        logger.info(String.format("Entering method in RoleService.getAllRoles()"));
         List<RoleDto> roleDtoList;
         List<Role> roleList = roleRepository.findAll();
         roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
+        logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
         return roleDtoList;
     }
 
