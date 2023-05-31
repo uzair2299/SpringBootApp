@@ -7,6 +7,8 @@ import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.RoleRepository;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
@@ -34,6 +36,7 @@ public class RoleService {
         List<Role> roleList = roleRepository.findAll();
         roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
         logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
+
         return roleDtoList;
     }
 

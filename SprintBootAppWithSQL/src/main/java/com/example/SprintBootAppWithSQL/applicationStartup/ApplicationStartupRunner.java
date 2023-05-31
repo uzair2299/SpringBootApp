@@ -1,4 +1,4 @@
-package com.example.SprintBootAppWithSQL.defaultData;
+package com.example.SprintBootAppWithSQL.applicationStartup;
 
 import com.example.SprintBootAppWithSQL.entities.*;
 import com.example.SprintBootAppWithSQL.services.*;
@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class DataLoader implements CommandLineRunner {
-    Logger logger = LoggerFactory.getLogger(DataLoader.class);
+public class ApplicationStartupRunner implements CommandLineRunner {
+    Logger logger = LoggerFactory.getLogger(ApplicationStartupRunner.class);
     @Autowired
     RoleService roleService;
     @Autowired
@@ -36,6 +37,14 @@ public class DataLoader implements CommandLineRunner {
     WorkTypeService workTypeService;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    public ApplicationStartupRunner(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
 
 
     @Override
@@ -116,6 +125,8 @@ public class DataLoader implements CommandLineRunner {
                 List<WorkType> workTypes = addWorkType();
                 workTypeService.saveAllWorkTypes(workTypes);
 
+                // Clear Redis data
+                redisTemplate.getConnectionFactory().getConnection().flushDb();
 
             }
         } catch (Exception e) {

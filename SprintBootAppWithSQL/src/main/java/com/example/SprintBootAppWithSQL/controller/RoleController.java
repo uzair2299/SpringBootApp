@@ -28,6 +28,7 @@ public class RoleController {
     @GetMapping("/api/v1/roles")
     public ResponseEntity<List<RoleDto>> getRoles() {
         try {
+
             logger.info(String.format("Executing getRoles request"));
             List<RoleDto> rolesList;
             rolesList = roleService.getAllRoles();
