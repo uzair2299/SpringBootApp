@@ -15,11 +15,5 @@ public class SprintBootAppWithSqlApplication {
 	public static void main(String[] args) {
 
 	ApplicationContext context =  SpringApplication.run(SprintBootAppWithSqlApplication.class, args);
-//	UserRepository userRepository =  context.getBean(UserRepository.class);
-//		List<User> user =  userRepository.findAll();
-//		System.out.println(user.size());
-//		user.forEach(item->{
-//			System.out.println(item.getName());
-//		});
 	}
 }

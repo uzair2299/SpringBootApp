@@ -49,7 +49,7 @@ public class LoginController {
     @PostMapping("/api/v1/login/")
     public ResponseEntity<JwtDto> login(@RequestBody UserDto user) {
         try {
-            sendEmail();
+           // sendEmail();
             UserDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName","Testing");
