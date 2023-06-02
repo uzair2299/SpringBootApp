@@ -7,6 +7,7 @@ import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.RoleRepository;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
+import jakarta.persistence.StoredProcedureQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
@@ -22,19 +23,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import jakarta.persistence.EntityManager;
 
 @Service
 public class RoleService {
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Cacheable(value = "allDataCache")
     public List<RoleDto> getAllRoles() {
         logger.info(String.format("Entering method in RoleService.getAllRoles()"));
+        StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("GetUserById");
+        query.execute();
+        List<Role> roles = query.getResultList();
+
         List<RoleDto> roleDtoList;
         List<Role> roleList = roleRepository.findAll();
-        roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
+        roleDtoList = MapperUtil.mapList(roles,RoleDto.class);
         logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
 
         return roleDtoList;

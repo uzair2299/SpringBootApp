@@ -16,6 +16,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@NamedStoredProcedureQuery(
+        name = "GetUserById",
+        procedureName = "GetEmployeesByDepartment"
+)
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
