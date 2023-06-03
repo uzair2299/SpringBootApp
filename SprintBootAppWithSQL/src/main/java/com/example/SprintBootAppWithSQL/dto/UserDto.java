@@ -1,8 +1,7 @@
 package com.example.SprintBootAppWithSQL.dto;
 
 
-import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.Data;
 
 import java.util.Date;
 

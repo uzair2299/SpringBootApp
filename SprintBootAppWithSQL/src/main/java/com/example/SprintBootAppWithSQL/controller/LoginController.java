@@ -1,11 +1,13 @@
 package com.example.SprintBootAppWithSQL.controller;
 
 import com.example.SprintBootAppWithSQL.dto.JwtDto;
+import com.example.SprintBootAppWithSQL.dto.LoginDto;
 import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import com.sun.xml.bind.v2.TODO;
+import jakarta.validation.Valid;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +49,10 @@ public class LoginController {
 
 
     @PostMapping("/api/v1/login/")
-    public ResponseEntity<JwtDto> login(@RequestBody UserDto user) {
+    public ResponseEntity<JwtDto> login(@RequestBody @Valid LoginDto user) {
         try {
            // sendEmail();
-            UserDto result = userService.getUserByUserName(user);
+            LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName","Testing");
             return new ResponseEntity<>(jwt.createToken(claims), HttpStatus.OK);

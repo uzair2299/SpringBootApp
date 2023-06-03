@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.services;
 
+import com.example.SprintBootAppWithSQL.dto.LoginDto;
 import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserDto getUserByUserName(UserDto userDto) {
+    public LoginDto getUserByUserName(LoginDto userDto) {
         User result = userRepository.findByUserName(userDto.getUserName());
         if (result == null) {
             throw new UsernameNotFoundException("User not found");
@@ -49,7 +50,7 @@ public class UserService {
         if (!passwordEncoder.matches(userDto.getPassword(), result.getPassword())) {
             throw new BadCredentialsException("Invalid username/password");
         }
-        UserDto user = MapperUtil.mapObject(result, UserDto.class);
+        LoginDto user = MapperUtil.mapObject(result, LoginDto.class);
         return user;
     }
 
