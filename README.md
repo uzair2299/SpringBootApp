@@ -81,7 +81,9 @@ Example request body:
 ## B
 ## C
 `@Column`
+
 `@Component` In the context of Spring Boot, a component is a class that is managed by the Spring framework and plays a role in the application's business logic.
+
 `@Controller` This annotation is used to mark a class as a controller component. Controller components handle HTTP requests and define the behavior of different endpoints in a web application. They often receive requests, process them, and return responses to the client.
 ## D
 ## E
