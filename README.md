@@ -107,6 +107,8 @@ Example request body:
 ## Q
 ## R
 `@Repository` This annotation is used to mark a class as a repository component. Repository components are responsible for interacting with databases or other data sources, providing data access operations such as storing, retrieving, and querying data.
+
+`@RequestMapping` is an annotation used to map HTTP requests to methods in a controller class, allowing you to define how your application handles specific URLs and HTTP methods.
 ## S
 ## T
 `@Table`
