@@ -109,6 +109,8 @@ Example request body:
 `@Repository` This annotation is used to mark a class as a repository component. Repository components are responsible for interacting with databases or other data sources, providing data access operations such as storing, retrieving, and querying data.
 
 `@RequestMapping` is an annotation used to map HTTP requests to methods in a controller class, allowing you to define how your application handles specific URLs and HTTP methods.
+
+`@RestController`is an annotation in Spring Boot that combines the functionality of both @Controller and @ResponseBody. It is commonly used to create RESTful web services where the methods in the annotated class are responsible for handling HTTP requests and returning the response in a format suitable for the client, such as JSON or XML.
 ## S
 ## T
 `@Table`
