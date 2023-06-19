@@ -116,6 +116,7 @@ Example request body:
 `@Table`
 ## U
 ## V
+`@Value`  is an annotation used in Spring Boot to inject values from configuration sources into fields, methods, or constructor parameters.
 ## W
 ## X
 ## Y
