@@ -78,6 +78,7 @@ Example request body:
 
 # Annotations
 ## A
+`@Autowired`  used for automatic dependency injection.This annotation can be used on fields, constructors, and methods to have Spring provide the dependencies automatically.
 ## B
 ## C
 `@Column`
