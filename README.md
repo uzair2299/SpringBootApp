@@ -96,7 +96,7 @@ Example request body:
 ## I
 `@Id :`  used to mark a field or property as primary key.
 ## J
-`@JoinColumn`
+`@JoinColumn` This annnotation is used for specify the foreign column.
 ## K
 ## L
 ## M
