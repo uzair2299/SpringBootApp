@@ -86,6 +86,7 @@ Example request body:
 `@Component` In the context of Spring Boot, a component is a class that is managed by the Spring framework and plays a role in the application's business logic.
 
 `@Controller` This annotation is used to mark a class as a controller component. Controller components handle HTTP requests and define the behavior of different endpoints in a web application. They often receive requests, process them, and return responses to the client.
+`@Configuration` annotation is used to indicate that a class declares one or more @Bean methods, and may be processed by the Spring container to generate bean definitions and service requests for those beans at runtime.alternative to XML-based configuration. It allows you to configure your Spring beans using a Java-based approach.
 ## D
 ## E
 `@Entity`
@@ -96,7 +97,7 @@ Example request body:
 ## I
 `@Id :`  used to mark a field or property as primary key.
 ## J
-`@JoinColumn`
+`@JoinColumn` This annnotation is used for specify the foreign column.
 ## K
 ## L
 ## M
