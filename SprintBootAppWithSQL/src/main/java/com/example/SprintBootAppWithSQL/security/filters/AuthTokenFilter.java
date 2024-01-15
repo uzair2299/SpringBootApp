@@ -1,5 +1,6 @@
-package com.example.SprintBootAppWithSQL.security;
+package com.example.SprintBootAppWithSQL.security.filters;
 
+import com.example.SprintBootAppWithSQL.security.AuthEntryPointJwt;
 import com.example.SprintBootAppWithSQL.services.UserDetailsImpl;
 import com.example.SprintBootAppWithSQL.services.UserDetailsServiceImpl;
 import com.example.SprintBootAppWithSQL.util.JwtUtils;
@@ -7,10 +8,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
+    @Autowired
+    private AuthEntryPointJwt authEntryPoint;
     private static final String AUTH_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
     @Autowired
@@ -70,11 +73,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // If the header is null or doesn't start with "Bearer ", continue with the filter chain
+
+        // If the header is null or doesn't start with "Bearer "
         if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
-            //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            //response.getWriter().write("Access is forbidden");
-            filterChain.doFilter(request, response);
+            authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
             return;
         }
 
@@ -88,12 +90,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
 
-
             // Set the authentication object in the security context
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
+            return;
         }
 
         // Check if the user has the required authority based on request method and URI

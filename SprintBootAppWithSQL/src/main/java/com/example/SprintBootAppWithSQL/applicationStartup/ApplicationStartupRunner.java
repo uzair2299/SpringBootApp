@@ -85,7 +85,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
                 List<Role> roles = roleService.getAllRoles_();
 
                 User user = new User();
-                user.setPassword(passwordEncoder.encode("testing"));
+                user.setPassword(passwordEncoder.encode("asdfghA1"));
                 user.setUserName("testing");
                 user.setEmail("testing@gmail.com");
                 user.setBio("testing");
