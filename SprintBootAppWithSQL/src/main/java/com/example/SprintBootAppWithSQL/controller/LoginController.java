@@ -8,6 +8,7 @@ import com.example.SprintBootAppWithSQL.services.UserService;
 import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import com.sun.xml.bind.v2.TODO;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@Slf4j
 @RestController
 public class LoginController {
     Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -52,6 +54,7 @@ public class LoginController {
     public ResponseEntity<JwtDto> login(@RequestBody @Valid LoginDto user) {
         try {
            // sendEmail();
+            logger.info("hello");
             LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName","Testing");

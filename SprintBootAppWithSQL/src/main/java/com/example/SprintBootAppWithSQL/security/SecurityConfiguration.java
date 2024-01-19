@@ -17,7 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class SecurityConfiguration  {
+public class SecurityConfiguration {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
     @Autowired
@@ -53,7 +53,8 @@ public class SecurityConfiguration  {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().requestMatchers("/api/v1/login/").permitAll()
-                 .requestMatchers("/api/v1/*").permitAll()
+                .requestMatchers("/api/v1/*").permitAll()
+
                 .anyRequest().authenticated();
 
 

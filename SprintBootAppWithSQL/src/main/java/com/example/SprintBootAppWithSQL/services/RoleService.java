@@ -38,13 +38,13 @@ public class RoleService {
     @Cacheable(value = "allDataCache")
     public List<RoleDto> getAllRoles() {
         logger.info(String.format("Entering method in RoleService.getAllRoles()"));
-        StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("GetUserById");
-        query.execute();
-        List<Role> roles = query.getResultList();
+        //StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("GetUserById");
+        //query.execute();
+        //List<Role> roles = query.getResultList();
 
         List<RoleDto> roleDtoList;
         List<Role> roleList = roleRepository.findAll();
-        roleDtoList = MapperUtil.mapList(roles,RoleDto.class);
+        roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
         logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
 
         return roleDtoList;
