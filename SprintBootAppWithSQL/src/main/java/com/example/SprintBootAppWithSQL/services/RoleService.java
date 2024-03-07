@@ -46,7 +46,6 @@ public class RoleService {
         List<Role> roleList = roleRepository.findAll();
         roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
         logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
-
         return roleDtoList;
     }
 
