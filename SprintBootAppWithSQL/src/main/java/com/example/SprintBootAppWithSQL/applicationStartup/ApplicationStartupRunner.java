@@ -1,6 +1,7 @@
 package com.example.SprintBootAppWithSQL.applicationStartup;
 
 import com.example.SprintBootAppWithSQL.entities.*;
+import com.example.SprintBootAppWithSQL.repository.PermissionRepository;
 import com.example.SprintBootAppWithSQL.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,13 +45,15 @@ public class ApplicationStartupRunner implements CommandLineRunner {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    PermissionService permissionService;
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     public ApplicationStartupRunner(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-
 
 
     @Override
@@ -130,6 +134,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
                 List<WorkType> workTypes = addWorkType();
                 workTypeService.saveAllWorkTypes(workTypes);
 
+                permissionService.saveAll(addPermission());
                 // Clear Redis data
                 redisTemplate.getConnectionFactory().getConnection().flushDb();
 
@@ -199,19 +204,19 @@ public class ApplicationStartupRunner implements CommandLineRunner {
         return departments;
     }
 
-    private List<DocumentType> addDocumentType(){
+    private List<DocumentType> addDocumentType() {
         List<DocumentType> documentTypes = new ArrayList<>();
-        documentTypes.add(new DocumentType("Offer letters","These are documents that the company issues to new employees, outlining the terms and conditions of their employment, including job title, salary, benefits, and start date."));
-        documentTypes.add(new DocumentType("Employment contracts","These are legal agreements between the company and its employees that formalize the terms and conditions of their employment, including job responsibilities, compensation, benefits, and termination provisions."));
-        documentTypes.add(new DocumentType("Disciplinary actions","These are documents that the company may issue to employees who have violated company policies or engaged in misconduct. Disciplinary actions may include verbal or written warnings, suspension, or termination."));
-        documentTypes.add(new DocumentType("Payroll records","These are documents that track the compensation and benefits paid to employees, including salary, overtime, bonuses, and deductions."));
-        documentTypes.add(new DocumentType("Resignation letters","These are documents that employees may submit to inform the company of their intention to resign from their position. Resignation letters typically include the employee's name, job title, and date of resignation."));
-        documentTypes.add(new DocumentType("Policies and procedures","These are documents that outline the company's rules, guidelines, and processes for various aspects of its operations, such as employee conduct, safety, and data privacy. Policies and procedures may be used to ensure compliance with legal and regulatory requirements, to maintain consistency across the organization, and to promote best practices."));
-        documentTypes.add(new DocumentType("Resumes or CVs","hhh"));
-        return  documentTypes;
+        documentTypes.add(new DocumentType("Offer letters", "These are documents that the company issues to new employees, outlining the terms and conditions of their employment, including job title, salary, benefits, and start date."));
+        documentTypes.add(new DocumentType("Employment contracts", "These are legal agreements between the company and its employees that formalize the terms and conditions of their employment, including job responsibilities, compensation, benefits, and termination provisions."));
+        documentTypes.add(new DocumentType("Disciplinary actions", "These are documents that the company may issue to employees who have violated company policies or engaged in misconduct. Disciplinary actions may include verbal or written warnings, suspension, or termination."));
+        documentTypes.add(new DocumentType("Payroll records", "These are documents that track the compensation and benefits paid to employees, including salary, overtime, bonuses, and deductions."));
+        documentTypes.add(new DocumentType("Resignation letters", "These are documents that employees may submit to inform the company of their intention to resign from their position. Resignation letters typically include the employee's name, job title, and date of resignation."));
+        documentTypes.add(new DocumentType("Policies and procedures", "These are documents that outline the company's rules, guidelines, and processes for various aspects of its operations, such as employee conduct, safety, and data privacy. Policies and procedures may be used to ensure compliance with legal and regulatory requirements, to maintain consistency across the organization, and to promote best practices."));
+        documentTypes.add(new DocumentType("Resumes or CVs", "hhh"));
+        return documentTypes;
     }
 
-    private  List<WorkType> addWorkType(){
+    private List<WorkType> addWorkType() {
         List<WorkType> workTypes = new ArrayList<>();
         workTypes.add(new WorkType("Full Time"));
         workTypes.add(new WorkType("Part Time"));
@@ -223,5 +228,27 @@ public class ApplicationStartupRunner implements CommandLineRunner {
         workTypes.add(new WorkType("Temporary"));
         workTypes.add(new WorkType("Volunteer"));
         return workTypes;
+    }
+
+    private List<Permission> addPermission() {
+        List<Permission> permissions = new ArrayList<>();
+        permissions.add(new Permission("VIEW", "Permission to view/read data or content."));
+        permissions.add(new Permission("LIST", "Permission to list multiple items or records."));
+        permissions.add(new Permission("SEARCH", "Permission to search for specific items or records."));
+        permissions.add(new Permission("EXPORT", "Permission to export data or content."));
+        permissions.add(new Permission("CREATE", "Permission to create new items or records."));
+        permissions.add(new Permission("EDIT", "Permission to modify existing items or records."));
+        permissions.add(new Permission("UPDATE", "Permission to update specific fields or properties of items or records."));
+        permissions.add(new Permission("MODIFY", "General permission to make changes (can include both edit and update)."));
+        permissions.add(new Permission("DELETE", "Permission to delete items or records."));
+        permissions.add(new Permission("REMOVE", "Permission to remove items or records (may imply a soft delete or archive action)."));
+        permissions.add(new Permission("ADMINISTER", "Permission to perform administrative tasks or manage system settings."));
+        permissions.add(new Permission("MANAGE", "General permission to manage resources, users, or configurations."));
+        permissions.add(new Permission("ACCESS", "Permission to access a specific feature, module, or area of the application."));
+        permissions.add(new Permission("AUTHORIZE", "Permission to authorize or grant access to other users."));
+        permissions.add(new Permission("EXECUTE", "Permission to execute or run specific operations or commands."));
+        permissions.add(new Permission("PERFORM", "General permission to perform actions (can include various operations)."));
+        permissions.add(new Permission("CUSTOM", "Custom-defined permissions tailored to specific application requirements."));
+        return permissions;
     }
 }

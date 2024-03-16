@@ -35,7 +35,7 @@ public class RoleService {
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    @Cacheable(value = "allDataCache")
+//    @Cacheable(value = "allDataCache")
     public List<RoleDto> getAllRoles() {
         logger.info(String.format("Entering method in RoleService.getAllRoles()"));
         //StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("GetUserById");

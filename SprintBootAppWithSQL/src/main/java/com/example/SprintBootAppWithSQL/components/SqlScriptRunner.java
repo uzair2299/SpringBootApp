@@ -24,23 +24,27 @@ import java.sql.Statement;
 
 @Component
 public class SqlScriptRunner implements ApplicationRunner {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-
-    @Autowired
-    private DataSource dataSource;
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-        ClassPathResource scriptResource = new ClassPathResource("GetRolesSP.sql");
-        String scriptContent = StreamUtils.copyToString(scriptResource.getInputStream(), StandardCharsets.UTF_8);
 
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(scriptContent);
-        }
     }
+//    @Autowired
+//    private EntityManagerFactory entityManagerFactory;
+//
+//
+//    @Autowired
+//    private DataSource dataSource;
+//    @Override
+//    public void run(ApplicationArguments args) throws Exception {
+//        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+//        ClassPathResource scriptResource = new ClassPathResource("GetRolesSP.sql");
+//        String scriptContent = StreamUtils.copyToString(scriptResource.getInputStream(), StandardCharsets.UTF_8);
+//
+//        try (Connection connection = dataSource.getConnection();
+//             Statement statement = connection.createStatement()) {
+//            statement.execute(scriptContent);
+//        }
+//    }
 }
 
 

@@ -21,15 +21,15 @@ import java.nio.file.Paths;
 */
 @Component
 public class StoredProcInitializer {
-    private final SessionFactory sessionFactory;
-
-
-    @Autowired
-    private ResourceLoader resourceLoader;
-    @Autowired
-    public StoredProcInitializer(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+//    private final SessionFactory sessionFactory;
+//
+//
+//    @Autowired
+//    private ResourceLoader resourceLoader;
+//    @Autowired
+//    public StoredProcInitializer(SessionFactory sessionFactory) {
+//        this.sessionFactory = sessionFactory;
+//    }
     @PostConstruct
     public void initializeStoredProc() {
        // try {
