@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -29,7 +28,16 @@ public class Role implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+
+    @OneToMany(mappedBy = "role")
+    private Set<UserRoles> userRoles = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "role")
+    private Set<RolesMenu> rolesMenus = new HashSet<>();
+
+
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "roles")
+//    private List<User> users;
 }

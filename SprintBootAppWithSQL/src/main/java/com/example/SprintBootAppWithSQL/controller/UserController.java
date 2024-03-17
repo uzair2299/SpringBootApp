@@ -61,7 +61,7 @@ public class UserController {
             System.out.println("User - " + user);
 
             List<Role> roles = roleService.getEntitiesByIds(user.getRolesId());
-            user.setRoles(roles);
+            //user.setRoles(roles);
             userRepository.save(user);
             return new ResponseEntity<>(new User(), HttpStatus.CREATED);
         } catch (Exception e) {

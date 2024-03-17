@@ -48,6 +48,11 @@ public class ApplicationStartupRunner implements CommandLineRunner {
     @Autowired
     PermissionService permissionService;
 
+    @Autowired
+    UserRolesService userRolesService;
+
+    @Autowired
+    RolesMenuService rolesMenuService;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
@@ -97,8 +102,10 @@ public class ApplicationStartupRunner implements CommandLineRunner {
                 user.setLastName("testing");
                 user.setIsActive(true);
                 user.setIsLocked(false);
-                user.setRoles(roles);
-                userService.saveUser(user);
+                //user.setRoles(roles);
+                user = userService.saveUser(user);
+                userRolesService.saveUserRoles(user.getId(), roles.get(0).getId());
+                userRolesService.saveUserRoles(user.getId(), roles.get(1).getId());
 
                 Menu parentMenu = new Menu(null, "Home", "/parent", 1);
 
@@ -115,12 +122,17 @@ public class ApplicationStartupRunner implements CommandLineRunner {
                 menuList.add(contactUs);
                 menuList.add(faQs);
                 menuList.add(support);
-                menuService.saveAllMenuItem(menuList);
+                menuList = menuService.saveAllMenuItem(menuList);
 
                 childMenu2.setParentMenu(parentMenu);
                 menuService.saveMenu(parentMenu);
                 menuService.saveMenu(childMenu1);
                 menuService.saveMenu(childMenu2);
+
+                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(0).getId());
+                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(1).getId());
+                rolesMenuService.saveRolesMenu(menuList.get(2).getId(),roles.get(1).getId());
+
 
                 List<Designation> designations = addDesignation();
                 designationService.saveAllDesignations(designations);
