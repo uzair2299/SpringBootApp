@@ -32,6 +32,9 @@ public class Permission {
     @Column(name = "updated_at")
     private Long updatedAt;
 
+    @Column(name="isDeleted")
+    private boolean isDeleted;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 //    @ManyToMany(mappedBy = "permissions")

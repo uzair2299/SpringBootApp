@@ -17,3 +17,5 @@ public class SprintBootAppWithSqlApplication {
 	ApplicationContext context =  SpringApplication.run(SprintBootAppWithSqlApplication.class, args);
 	}
 }
+
+

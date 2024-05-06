@@ -14,6 +14,7 @@ public class PermissionDto {
     private String permissionName;
     private String code;
     private String module;
+    private boolean isDeleted;
     private Long createdAt;
     private Long updatedAt;
     private String description;

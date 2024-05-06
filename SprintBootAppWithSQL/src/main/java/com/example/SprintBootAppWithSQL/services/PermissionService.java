@@ -2,6 +2,7 @@ package com.example.SprintBootAppWithSQL.services;
 
 import com.example.SprintBootAppWithSQL.dto.PermissionDto;
 import com.example.SprintBootAppWithSQL.entities.Permission;
+import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.PermissionRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,42 +23,59 @@ public class PermissionService {
     @Autowired
     private EntityManager entityManager;
 
-//    @Cacheable(value = "allDataCache")
+    //    @Cacheable(value = "allDataCache")
     public List<PermissionDto> getAllPermissions() {
         log.info(String.format("Entering method in PermissionService.getAllPermissions()"));
 
-        List<PermissionDto> roleDtoList;
-        List<Permission> roleList = permissionRepository.findAll();
-        roleDtoList = MapperUtil.mapList(roleList,PermissionDto.class);
+        List<PermissionDto> permissionDtoList;
+//        List<Object[]> o = permissionRepository.getAll();
+//        List<Permission> permissionList2 = permissionRepository.findByIsDeletedTrue();
+
+
+        List<Permission> permissionList = permissionRepository.findByIsDeletedFalse();
+
+
+        //List<Permission> permissionList = permissionRepository.findAll();
+        permissionDtoList = MapperUtil.mapList(permissionList, PermissionDto.class);
         log.info(String.format("Leaving method in PermissionService.getAllPermissions()"));
-        return roleDtoList;
+        return permissionDtoList;
     }
 
+    public PermissionDto getPermissionById(int permissionId) {
+        Optional<Permission> permissionOptional = permissionRepository.findById(Long.valueOf(permissionId));
+        if (permissionOptional.isPresent()) {
+            Permission permission = permissionOptional.get();
+            PermissionDto permissionDto = MapperUtil.mapObject(permission, PermissionDto.class);
+            return permissionDto;
+        } else {
+            return null;
+        }
+    }
 
-//
-//    public List<Role> getAllRoles_() {
-//        List<Role> roleList = roleRepository.findAll();
-//        return roleList;
-//    }
-//
-//    public RoleDto createRole(RoleDto roleDto) {
-//        Role role =  MapperUtil.mapObject(roleDto,Role.class);
-//        Role savedRole = roleRepository.save(role);
-//        RoleDto savedRoleDto = MapperUtil.mapObject(savedRole, RoleDto.class);
-//        return savedRoleDto;
-//    }
-//
     public List<Permission> saveAll(List<Permission> role) {
         return permissionRepository.saveAll(role);
     }
-//
-//    public Long getRolesCount() {
-//        return roleRepository.count();
-//    }
-//
-//    public List<Role> getEntitiesByIds(List<Long> ids) {
-//        List<Role> roles = roleRepository.findByIdIn(ids);
-//        return roles;
-//    }
 
+
+    public PermissionDto updatePermissionIsDeleted(PermissionDto permissionDto){
+        permissionDto.setDeleted(true);
+        permissionDto.setUpdatedAt(System.currentTimeMillis());
+        Permission permission = MapperUtil.mapObject(permissionDto, Permission.class);
+        permission =  this.save(permission);
+        PermissionDto mapObject = MapperUtil.mapObject(permission, PermissionDto.class);
+        return mapObject;
+
+    }
+    public Permission save(Permission permission) {
+        return permissionRepository.save(permission);
+    }
+
+    public PermissionDto save(PermissionDto permissionDto) {
+
+        Permission permission = MapperUtil.mapObject(permissionDto, Permission.class);
+        permission =  this.save(permission);
+        permission =  permissionRepository.save(permission);
+        PermissionDto mapObject = MapperUtil.mapObject(permission, PermissionDto.class);
+        return mapObject;
+    }
 }
