@@ -63,98 +63,98 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try {
-            Long count = roleService.getRolesCount();
-            if (count == 0) {
-                List<Role> roleList = new ArrayList<>();
-                Role role = new Role();
-                role.setRoleName("Admin");
-                role.setCreatedAt(new Date());
-                role.setUpdatedAt(new Date());
-                role.setDescription("Description");
-
-                Role superAdmin = new Role();
-                superAdmin.setRoleName("Super Admin");
-                superAdmin.setCreatedAt(new Date());
-                superAdmin.setUpdatedAt(new Date());
-                superAdmin.setDescription("This role has full control over all aspects of the application and can manage other admins");
-
-                Role userAdministrator = new Role();
-                userAdministrator.setRoleName("User Administrator");
-                userAdministrator.setCreatedAt(new Date());
-                userAdministrator.setUpdatedAt(new Date());
-                userAdministrator.setDescription("This role is responsible for managing user accounts, including creating and deleting accounts, resetting passwords, and managing user permissions");
-
-                roleList.add(role);
-                roleList.add(superAdmin);
-                roleList.add(userAdministrator);
-                roleService.saveAll(roleList);
-
-
-                List<Role> roles = roleService.getAllRoles_();
-
-                User user = new User();
-                user.setPassword(passwordEncoder.encode("asdfghA1"));
-                user.setUserName("testing");
-                user.setEmail("testing@gmail.com");
-                user.setBio("testing");
-                user.setFirstName("testing");
-                user.setLastName("testing");
-                user.setIsActive(true);
-                user.setIsLocked(false);
-                //user.setRoles(roles);
-                user = userService.saveUser(user);
-                userRolesService.saveUserRoles(user.getId(), roles.get(0).getId());
-                userRolesService.saveUserRoles(user.getId(), roles.get(1).getId());
-
-                Menu parentMenu = new Menu(null, "Home", "/parent", 1);
-
-                Menu childMenu1 = new Menu(null, "Child 1", "/parent/child1", 1);
-                childMenu1.setParentMenu(parentMenu);
-                Menu childMenu2 = new Menu(null, "Child 2", "/parent/child2", 1);
-
-                List<Menu> menuList = new ArrayList<>();
-                Menu aboutUs = new Menu(null, "About Us", "/aboutUs", 1);
-                Menu contactUs = new Menu(null, "Contact Us", "/contactUs", 1);
-                Menu faQs = new Menu(null, "FAQs", "/faQs", 1);
-                Menu support = new Menu(null, "Support", "/support", 1);
-                menuList.add(aboutUs);
-                menuList.add(contactUs);
-                menuList.add(faQs);
-                menuList.add(support);
-                menuList = menuService.saveAllMenuItem(menuList);
-
-                childMenu2.setParentMenu(parentMenu);
-                menuService.saveMenu(parentMenu);
-                menuService.saveMenu(childMenu1);
-                menuService.saveMenu(childMenu2);
-
-                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(0).getId());
-                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(1).getId());
-                rolesMenuService.saveRolesMenu(menuList.get(2).getId(),roles.get(1).getId());
-
-
-                List<Designation> designations = addDesignation();
-                designationService.saveAllDesignations(designations);
-
-                List<Department> departments = addDepartment();
-                departmentService.saveAllDepartments(departments);
-
-                List<DocumentType> documentTypes = addDocumentType();
-                documentTypeService.saveAllDocumentType(documentTypes);
-
-                List<WorkType> workTypes = addWorkType();
-                workTypeService.saveAllWorkTypes(workTypes);
-
-                permissionService.saveAll(addPermission());
-                // Clear Redis data
-                redisTemplate.getConnectionFactory().getConnection().flushDb();
-
-            }
-        } catch (Exception e) {
-            //throw e;
-            logger.error(String.format("Exception - [%s]", e));
-        }
+//        try {
+//            Long count = roleService.getRolesCount();
+//            if (count == 0) {
+//                List<Role> roleList = new ArrayList<>();
+//                Role role = new Role();
+//                role.setRoleName("Admin");
+//                role.setCreatedAt(new Date());
+//                role.setUpdatedAt(new Date());
+//                role.setDescription("Description");
+//
+//                Role superAdmin = new Role();
+//                superAdmin.setRoleName("Super Admin");
+//                superAdmin.setCreatedAt(new Date());
+//                superAdmin.setUpdatedAt(new Date());
+//                superAdmin.setDescription("This role has full control over all aspects of the application and can manage other admins");
+//
+//                Role userAdministrator = new Role();
+//                userAdministrator.setRoleName("User Administrator");
+//                userAdministrator.setCreatedAt(new Date());
+//                userAdministrator.setUpdatedAt(new Date());
+//                userAdministrator.setDescription("This role is responsible for managing user accounts, including creating and deleting accounts, resetting passwords, and managing user permissions");
+//
+//                roleList.add(role);
+//                roleList.add(superAdmin);
+//                roleList.add(userAdministrator);
+//                roleService.saveAll(roleList);
+//
+//
+//                List<Role> roles = roleService.getAllRoles_();
+//
+//                User user = new User();
+//                user.setPassword(passwordEncoder.encode("asdfghA1"));
+//                user.setUserName("testing");
+//                user.setEmail("testing@gmail.com");
+//                user.setBio("testing");
+//                user.setFirstName("testing");
+//                user.setLastName("testing");
+//                user.setIsActive(true);
+//                user.setIsLocked(false);
+//                //user.setRoles(roles);
+//                user = userService.saveUser(user);
+//                userRolesService.saveUserRoles(user.getId(), roles.get(0).getId());
+//                userRolesService.saveUserRoles(user.getId(), roles.get(1).getId());
+//
+//                Menu parentMenu = new Menu(null, "Home", "/parent", 1);
+//
+//                Menu childMenu1 = new Menu(null, "Child 1", "/parent/child1", 1);
+//                childMenu1.setParentMenu(parentMenu);
+//                Menu childMenu2 = new Menu(null, "Child 2", "/parent/child2", 1);
+//
+//                List<Menu> menuList = new ArrayList<>();
+//                Menu aboutUs = new Menu(null, "About Us", "/aboutUs", 1);
+//                Menu contactUs = new Menu(null, "Contact Us", "/contactUs", 1);
+//                Menu faQs = new Menu(null, "FAQs", "/faQs", 1);
+//                Menu support = new Menu(null, "Support", "/support", 1);
+//                menuList.add(aboutUs);
+//                menuList.add(contactUs);
+//                menuList.add(faQs);
+//                menuList.add(support);
+//                menuList = menuService.saveAllMenuItem(menuList);
+//
+//                childMenu2.setParentMenu(parentMenu);
+//                menuService.saveMenu(parentMenu);
+//                menuService.saveMenu(childMenu1);
+//                menuService.saveMenu(childMenu2);
+//
+//                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(0).getId());
+//                rolesMenuService.saveRolesMenu(menuList.get(0).getId(),roles.get(1).getId());
+//                rolesMenuService.saveRolesMenu(menuList.get(2).getId(),roles.get(1).getId());
+//
+//
+//                List<Designation> designations = addDesignation();
+//                designationService.saveAllDesignations(designations);
+//
+//                List<Department> departments = addDepartment();
+//                departmentService.saveAllDepartments(departments);
+//
+//                List<DocumentType> documentTypes = addDocumentType();
+//                documentTypeService.saveAllDocumentType(documentTypes);
+//
+//                List<WorkType> workTypes = addWorkType();
+//                workTypeService.saveAllWorkTypes(workTypes);
+//
+//                permissionService.saveAll(addPermission());
+//                // Clear Redis data
+//                redisTemplate.getConnectionFactory().getConnection().flushDb();
+//
+//            }
+//        } catch (Exception e) {
+//            //throw e;
+//            logger.error(String.format("Exception - [%s]", e));
+//        }
     }
 
     private List<Designation> addDesignation() {
