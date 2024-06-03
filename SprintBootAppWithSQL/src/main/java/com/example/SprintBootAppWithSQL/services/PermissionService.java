@@ -28,14 +28,7 @@ public class PermissionService {
         log.info(String.format("Entering method in PermissionService.getAllPermissions()"));
 
         List<PermissionDto> permissionDtoList;
-//        List<Object[]> o = permissionRepository.getAll();
-//        List<Permission> permissionList2 = permissionRepository.findByIsDeletedTrue();
-
-
         List<Permission> permissionList = permissionRepository.findByIsDeletedFalse();
-
-
-        //List<Permission> permissionList = permissionRepository.findAll();
         permissionDtoList = MapperUtil.mapList(permissionList, PermissionDto.class);
         log.info(String.format("Leaving method in PermissionService.getAllPermissions()"));
         return permissionDtoList;

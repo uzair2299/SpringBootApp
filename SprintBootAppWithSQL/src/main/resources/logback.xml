@@ -28,3 +28,6 @@
         <appender-ref ref="FILE" />
     </root>
 </configuration>
+
+<!--If you need to apply customizations to logback beyond those that can be achieved with application.properties, you’ll need to add a standard logback configuration file.-->
+<!--In a Spring Boot application, you can put the Logback.xml file in the resources folder.-->

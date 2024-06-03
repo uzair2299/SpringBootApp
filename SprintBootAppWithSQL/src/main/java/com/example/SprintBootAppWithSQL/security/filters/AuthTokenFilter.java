@@ -8,8 +8,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,12 +23,16 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.UUID;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private AuthEntryPointJwt authEntryPoint;
     private static final String AUTH_HEADER = "Authorization";
+    private static final String CO_RELATION_ID = "Authorization";
+
     private static final String TOKEN_PREFIX = "Bearer ";
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -40,74 +46,96 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        // Get the authorization header from the request
-        String authHeader = request.getHeader(AUTH_HEADER);
+        try {
 
-        String requestMethod = request.getMethod();
-        String requestURL = request.getRequestURL().toString();
-        String requestURI = request.getRequestURI();
-        String scheme = request.getScheme(); // http or https
-        String serverName = request.getServerName();
-        int serverPort = request.getServerPort();
-        String contextPath = request.getContextPath();
+            handleMDC(request);
+            // Get the authorization header from the request
+            String authHeader = request.getHeader(AUTH_HEADER);
 
-        logger.info(String.format("authHeader - [%s]", authHeader));
-        logger.info(String.format("requestURL - [%s]", requestURL));
-        logger.info(String.format("requestURI - [%s]", requestURI));
-        logger.info(String.format("requestMethod - [%s]", requestMethod));
-        logger.info(String.format("scheme - [%s]", scheme));
-        logger.info(String.format("serverName - [%s]", serverName));
-        logger.info(String.format("serverPort - [%s]", serverPort));
-        logger.info(String.format("contextPath - [%s]", contextPath));
+            String requestMethod = request.getMethod();
+            String requestURL = request.getRequestURL().toString();
+            String requestURI = request.getRequestURI();
+            String scheme = request.getScheme(); // http or https
+            String serverName = request.getServerName();
+            int serverPort = request.getServerPort();
+            String contextPath = request.getContextPath();
 
-        StringBuilder baseFQDN = new StringBuilder();
-        baseFQDN.append(scheme).append("://").append(serverName);
-        baseFQDN.append(":").append(serverPort);
-        baseFQDN.append(contextPath);
-        logger.info(String.format("baseFQDN", baseFQDN));
+            logger.info(String.format("authHeader - [%s]", authHeader));
+            logger.info(String.format("requestURL - [%s]", requestURL));
+            logger.info(String.format("requestURI - [%s]", requestURI));
+            logger.info(String.format("requestMethod - [%s]", requestMethod));
+            logger.info(String.format("scheme - [%s]", scheme));
+            logger.info(String.format("serverName - [%s]", serverName));
+            logger.info(String.format("serverPort - [%s]", serverPort));
+            logger.info(String.format("contextPath - [%s]", contextPath));
+
+            StringBuilder baseFQDN = new StringBuilder();
+            baseFQDN.append(scheme).append("://").append(serverName);
+            baseFQDN.append(":").append(serverPort);
+            baseFQDN.append(contextPath);
+            logger.info(String.format("baseFQDN", baseFQDN));
 
 
-        if (isLoginRequest(requestURL, requestURI)) {
+            if (isLoginRequest(requestURL, requestURI)) {
+                filterChain.doFilter(request, response);
+                //The return; statement immediately exits the current method and returns from the filter. This ensures that the remaining lines of code in the filter method are not executed for the login request.
+                return;
+            }
+
+
+            // If the header is null or doesn't start with "Bearer "
+            if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
+                authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
+                return;
+            }
+
+            // Extract the JWT token from the header
+            String jwtToken = authHeader.substring(TOKEN_PREFIX.length());
+
+
+            if (jwtUtils.validateJwtToken(jwtToken, response)) {
+                // Get the user details from the token
+                String userName = jwtUtils.extractClaims(jwtToken).get("userName", String.class);
+
+                UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
+
+                // Set the authentication object in the security context
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
+                return;
+            }
+
+            // Check if the user has the required authority based on request method and URI
+            if (!hasAuthority(requestMethod, requestURI)) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
+            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
             filterChain.doFilter(request, response);
-            //The return; statement immediately exits the current method and returns from the filter. This ensures that the remaining lines of code in the filter method are not executed for the login request.
-            return;
+
+        } finally {
+            clearMDC();
         }
 
+    }
 
-        // If the header is null or doesn't start with "Bearer "
-        if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
-            authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
-            return;
-        }
-
-        // Extract the JWT token from the header
-        String jwtToken = authHeader.substring(TOKEN_PREFIX.length());
-
-
-        if (jwtUtils.validateJwtToken(jwtToken, response)) {
-            // Get the user details from the token
-            String userName = jwtUtils.extractClaims(jwtToken).get("userName", String.class);
-
-            UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
-
-            // Set the authentication object in the security context
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+    private void handleMDC(HttpServletRequest request) {
+        String co_relationId = request.getHeader(CO_RELATION_ID);
+        if (StringUtils.isNotBlank(co_relationId)) {
+            MDC.put("requestID", co_relationId);
         } else {
-            authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
-            return;
+            co_relationId = UUID.randomUUID().toString();
+            MDC.put("requestID", co_relationId);
         }
+    }
 
-        // Check if the user has the required authority based on request method and URI
-        if (!hasAuthority(requestMethod, requestURI)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
-        //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
-        filterChain.doFilter(request, response);
+    private void clearMDC() {
+        MDC.clear();
     }
 
     private boolean hasAuthority(String requestMethod, String requestURI) {
@@ -148,7 +176,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         //Login requests may include specific headers or header values that indicate they are related to authentication or login. You can inspect the request headers using request.getHeader("headerName") and check for any login-related headers or specific header values.
         return requestURL.contains("/login") || requestURI.contains("/login");
     }
+
 }
+
+
 
 /*
 In the debug mode, when you inspect an interface type variable, you might see the fields of the implementing class because the debugging tool often shows the actual runtime type of the object being referenced.

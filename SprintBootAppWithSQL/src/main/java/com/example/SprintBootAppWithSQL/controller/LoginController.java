@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.config.PropService;
 import com.example.SprintBootAppWithSQL.dto.JwtDto;
 import com.example.SprintBootAppWithSQL.dto.LoginDto;
 import com.example.SprintBootAppWithSQL.dto.UserDto;
@@ -40,6 +41,8 @@ public class LoginController {
 
 
     @Autowired
+    PropService propService;
+    @Autowired
     UserService userService;
 
 
@@ -56,6 +59,8 @@ public class LoginController {
         try {
            // sendEmail();
             logger.info("hello");
+            log.info("update url = " +  propService.getBaseUrl());
+            propService.setBaseUrl(user.getUserName());
             LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName","Testing");

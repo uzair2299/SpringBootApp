@@ -47,9 +47,9 @@ public class UserService {
         if (result != null && !result.getIsLocked().equals(false)) {
             throw new LockedException(" user account is locked");
         }
-        if (!passwordEncoder.matches(userDto.getPassword(), result.getPassword())) {
-            throw new BadCredentialsException("Invalid username/password");
-        }
+//        if (!passwordEncoder.matches(userDto.getPassword(), result.getPassword())) {
+//            throw new BadCredentialsException("Invalid username/password");
+//        }
         LoginDto user = MapperUtil.mapObject(result, LoginDto.class);
         return user;
     }

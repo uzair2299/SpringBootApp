@@ -14,8 +14,13 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
     List<Permission> findByIsDeletedTrue();
 
-    @Query(value = "SELECT * FROM public.permissions where is_deleted = false\n" +
+    @Query(value = "SELECT * FROM public.permission where is_deleted = false\n" +
             "ORDER BY id ASC ",nativeQuery = true)
     List<Object[]> getAll();
+
+
+    @Query(value = "SELECT * FROM public.permission where is_deleted = false\n" +
+            "ORDER BY id ASC ",nativeQuery = true)
+    List<Permission> getAll_();
 }
 

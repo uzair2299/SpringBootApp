@@ -1,0 +1,31 @@
+INSERT INTO app_user (
+    user_name,
+    first_name,
+    last_name,
+    password,
+    email,
+    date_joined,
+    last_login,
+    is_active,
+    is_locked,
+    profile_picture,
+    bio,
+    primary_phone,
+    secondary_phone,
+    work_phone
+) VALUES (
+    'john_doe',
+    'John',
+    'Doe',
+    '$2a$10$DowrX0AfF/nDZ8D0czB..uz/6vplU9l1QbZBD3MLF2/yyROFpAGTC',
+    'john.doe@example.com',
+    '2024-05-17 10:00:00',
+    NULL,
+    true,
+    false,
+    'profile_pic.jpg',
+    'A short bio about John Doe.',
+    '1234567890',
+    '0987654321',
+    '1122334455'
+);
