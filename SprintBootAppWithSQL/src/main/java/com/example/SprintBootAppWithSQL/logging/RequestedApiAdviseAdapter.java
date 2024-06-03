@@ -29,7 +29,11 @@ public class RequestedApiAdviseAdapter extends RequestBodyAdviceAdapter {
         Gson gson = new GsonBuilder().serializeNulls().create();
         log.info(String.format("RequestBody [%s]", gson.toJson(body)));
 
+<<<<<<< HEAD
 //        log.info(String.format("RequestBody [%s]", body));
+=======
+        log.info(String.format("RequestBody helloo [%s]", body));
+>>>>>>> 0bcd901b7e353c140053ec7f5afa51b5e7ce2b17
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }
 
