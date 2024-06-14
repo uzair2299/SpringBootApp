@@ -65,20 +65,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             int serverPort = request.getServerPort();
             String contextPath = request.getContextPath();
 
-            logger.info(String.format("authHeader - [%s]", authHeader));
-            logger.info(String.format("requestURL - [%s]", requestURL));
-            logger.info(String.format("requestURI - [%s]", requestURI));
-            logger.info(String.format("requestMethod - [%s]", requestMethod));
-            logger.info(String.format("scheme - [%s]", scheme));
-            logger.info(String.format("serverName - [%s]", serverName));
-            logger.info(String.format("serverPort - [%s]", serverPort));
-            logger.info(String.format("contextPath - [%s]", contextPath));
+
 
             StringBuilder baseFQDN = new StringBuilder();
             baseFQDN.append(scheme).append("://").append(serverName);
             baseFQDN.append(":").append(serverPort);
             baseFQDN.append(contextPath);
-            logger.info(String.format("baseFQDN", baseFQDN));
+            log.info(String.format("Request Receive at filter %n authHeader - [%s],%n requestURL - [%s],%n requestURI - [%s],%n requestMethod - [%s],%n scheme - [%s],%n serverName - [%s],%n serverPort - [%s],%n contextPath - [%s],%n baseFQDN - [%s]",
+                    authHeader, requestURL, requestURI, requestMethod, scheme, serverName, serverPort, contextPath,baseFQDN));
 
 
             if (isLoginRequest(requestURL, requestURI)) {

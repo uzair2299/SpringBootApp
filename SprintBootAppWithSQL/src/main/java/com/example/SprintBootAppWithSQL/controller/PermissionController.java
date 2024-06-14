@@ -87,7 +87,8 @@ public class PermissionController {
         return ResponseEntity.ok().body(permissionDto);
     }
 
-    @PostMapping("/api/v1/permission")
+
+    @RequestMapping(value = "/CreateNewPermission", method = RequestMethod.POST)
     public ResponseEntity<PermissionDto> createNewPermission(@RequestBody PermissionDto permissionDto) {
         try {
             logger.info(String.format("permissionDto - " + permissionDto));
@@ -99,17 +100,18 @@ public class PermissionController {
         }
     }
 
-    //    @PutMapping("/api/v1/users/{id}")
-//    public ResponseEntity<User> updateUser(@PathVariable("id") int userId) {
-//        System.out.println("User Id - " + userId);
-//        List<User> userList = new ArrayList<>();
-////        //User user = new User(UUID.randomUUID(), "ABC");
-////        User user1 = new User(UUID.randomUUID(), "ABC");
-////        userList.add(user1);
-////        userList.add(user);
-//        return ResponseEntity.accepted().body(new User());
-//    }
-//
+    @RequestMapping(value = "/updatePermission/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> updatePermission(@PathVariable Long id, @RequestBody PermissionDto permissionDto) {
+
+  log.info("hello");
+        //List<User> userList = new ArrayList<>();
+//        //User user = new User(UUID.randomUUID(), "ABC");
+//        User user1 = new User(UUID.randomUUID(), "ABC");
+//        userList.add(user1);
+//        userList.add(user);
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<String> softDeletePermission(@PathVariable("id") int permissionId) {
         try {
