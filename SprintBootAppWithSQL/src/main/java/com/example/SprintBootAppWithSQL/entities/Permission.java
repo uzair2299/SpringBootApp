@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "permission")
 @Getter
 @Setter
 public class Permission {
@@ -32,7 +32,7 @@ public class Permission {
     @Column(name = "updated_at")
     private Long updatedAt;
 
-    @Column(name="isDeleted")
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
     @Column(columnDefinition = "TEXT")
@@ -41,10 +41,11 @@ public class Permission {
 //    private List<Resource> resources;
 
 
-    public Permission(String permissionName,String description){
+    public Permission(String permissionName, String description) {
         this.permissionName = permissionName;
         this.description = description;
     }
+
     // Default constructor (required by JPA)
     public Permission() {
     }

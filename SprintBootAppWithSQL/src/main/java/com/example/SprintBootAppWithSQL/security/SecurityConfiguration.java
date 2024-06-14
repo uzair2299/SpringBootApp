@@ -45,6 +45,8 @@ public class SecurityConfiguration {
         return new AuthTokenFilter();
     }
 
+
+    //This method filterChain(HttpSecurity http) is used to create and customize the Spring Security filter chain, which is responsible for handling incoming HTTP requests and applying security measures as defined in the configuration
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -53,12 +55,10 @@ public class SecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().requestMatchers("/api/v1/login/").permitAll()
-                .requestMatchers("/api/v1/*").permitAll()
-
                 .anyRequest().authenticated();
 
 
-        http.authenticationProvider(authenticationProvider());
+        //http.authenticationProvider(authenticationProvider());
 
         //purpose of this line is to customize the Spring Security filter chain to include your custom JWT authentication filter (authenticationJwtTokenFilter()) before the default UsernamePasswordAuthenticationFilter.
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

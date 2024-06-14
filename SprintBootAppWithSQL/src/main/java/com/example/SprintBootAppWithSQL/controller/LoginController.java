@@ -58,9 +58,6 @@ public class LoginController {
     public ResponseEntity<JwtDto> login(@RequestBody @Valid LoginDto user) {
         try {
            // sendEmail();
-            logger.info("hello");
-            log.info("update url = " +  propService.getBaseUrl());
-            propService.setBaseUrl(user.getUserName());
             LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName","Testing");

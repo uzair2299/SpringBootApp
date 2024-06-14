@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e72b5112-c38b-4dcd-839a-667e356435ba",
+		"_postman_id": "0256d5ec-0133-4020-a4bb-92783bee1a62",
 		"name": "SpringBootCrudApp",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12170708"
 	},
 	"item": [
 		{
@@ -17,9 +18,7 @@
 								"exec": [
 									"const jsonData = pm.response.json();\r",
 									"const token = jsonData.token;\r",
-									"pm.collectionVariables.set(\"jwtToken\", token)\r",
-									"\r",
-									"console.log(\" getting token \" + pm.variables.get(\"jwtToken\"))\r",
+									"pm.variables.set(\"jwtToken\", token);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -39,26 +38,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{Auth_URL}}",
-							"host": [
-								"{{Auth_URL}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Testing",
-			"item": [
-				{
-					"name": "TestingGet",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8081/api/test/",
+							"raw": "http://localhost:8081/api/v1/login/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -66,7 +46,8 @@
 							"port": "8081",
 							"path": [
 								"api",
-								"test",
+								"v1",
+								"login",
 								""
 							]
 						}
@@ -80,43 +61,11 @@
 			"item": [
 				{
 					"name": "GetRoles",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwtToken}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:8081/api/v1/roles",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"roles"
-							]
+							"raw": ""
 						}
 					},
 					"response": []
@@ -138,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"roleName\": \"testing\",\r\n    \"description\": \"testing\"\r\n}",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"roleName\": \"admin\",\r\n    \"description\": \"Administrator role\",\r\n    \"createdAt\": \"2022-05-01T12:00:00Z\",\r\n    \"updatedAt\": \"2022-05-01T12:00:00Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -164,17 +113,36 @@
 			]
 		},
 		{
-			"name": "User",
+			"name": "Permission",
 			"item": [
 				{
-					"name": "GetUsers",
+					"name": "GetAllNonActivePermission",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Get JWT token from collection variable\r",
+									"const jwtToken = pm.collectionVariables.get('jwtToken');\r",
+									"\r",
+									"// Add JWT token to request headers\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: `Bearer ${jwtToken}`\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwtToken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -182,143 +150,136 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/v1/users",
-							"protocol": "http",
+							"raw": "{{basePath}}:8081/api/v1/permission/getAllNonActive",
 							"host": [
-								"localhost"
+								"{{basePath}}"
 							],
 							"port": "8081",
 							"path": [
 								"api",
 								"v1",
-								"users"
+								"permission",
+								"getAllNonActive"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "PostUser",
+					"name": "GetAllActivePermission",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Get JWT token from collection variable\r",
+									"const jwtToken = pm.collectionVariables.get('jwtToken');\r",
+									"\r",
+									"// Add JWT token to request headers\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: `Bearer ${jwtToken}`\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwtToken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"testing1\",\r\n    \"firstName\": null,\r\n    \"lastName\": null,\r\n    \"password\": \"testing1\",\r\n    \"email\": \"testing1@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": null,\r\n    \"profilePicture\": null,\r\n    \"bio\": null,\r\n    \"primaryPhone\": null,\r\n    \"secondaryPhone\": null,\r\n    \"workPhone\": null\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/api/v1/users/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateUserInfo",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwtToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userName\": null,\r\n    \"firstName\": \"uzair\",\r\n    \"lastName\": \"anwar\",\r\n    \"password\": \"testing\",\r\n    \"email\": \"testing@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": null,\r\n    \"profilePicture\": null,\r\n    \"bio\": null,\r\n    \"primaryPhone\": null,\r\n    \"secondaryPhone\": null,\r\n    \"workPhone\": null\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/api/v1/users/info/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"info",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetUserById",
-					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/1",
-							"protocol": "http",
+							"raw": "{{basePath}}:8081/api/v1/permission/getAllActive",
 							"host": [
-								"localhost"
+								"{{basePath}}"
 							],
-							"port": "8080",
+							"port": "8081",
 							"path": [
 								"api",
 								"v1",
-								"users",
-								"1"
+								"permission",
+								"getAllActive"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "DeleteUser",
+					"name": "GetAllPermission",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Get JWT token from collection variable\r",
+									"const jwtToken = pm.collectionVariables.get('jwtToken');\r",
+									"\r",
+									"// Add JWT token to request headers\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: `Bearer ${jwtToken}`\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
-						"method": "DELETE",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/103",
-							"protocol": "http",
+							"raw": "{{basePath}}:8081/api/v1/permission/getAll",
 							"host": [
-								"localhost"
+								"{{basePath}}"
 							],
-							"port": "8080",
+							"port": "8081",
 							"path": [
 								"api",
 								"v1",
-								"users",
-								"103"
+								"permission",
+								"getAll"
 							]
 						}
 					},
@@ -327,163 +288,59 @@
 			]
 		},
 		{
-			"name": "Employee",
-			"item": [
-				{
-					"name": "GetUsers",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "PostEmployee",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwtToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"testing employee\",\r\n    \"firstName\": \"firstName\",\r\n    \"lastName\": \"lastName\",\r\n    \"password\": \"testing1\",\r\n    \"email\": \"testing1@gmial.com\",\r\n    \"dateJoined\": null,\r\n    \"lastLogin\": null,\r\n    \"isActive\": true,\r\n    \"isLocked\":true,\r\n    \"profilePicture\": null,\r\n    \"bio\": \"bio\",\r\n    \"primaryPhone\": \"+923366312299\",\r\n    \"secondaryPhone\": \"+923366312299\",\r\n    \"workPhone\": \"+923366312299\",\r\n    \"department_id\":1,\r\n    \"work_type_id\" :2,\r\n    \"designation_id\":10\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/api/v1/employee/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"employee",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateUserInfo",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "GetUserById",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteUser",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
+			"name": "GetUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
-			]
+			},
+			"response": []
 		},
 		{
-			"name": "DocumentType",
-			"item": [
-				{
-					"name": "GetDocumentTypes",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwtToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8081/api/v1/documentTypes",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"documentTypes"
-							]
-						}
-					},
-					"response": []
+			"name": "PostUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
-			]
+			},
+			"response": []
 		},
 		{
-			"name": "BankAccount",
-			"item": [
-				{
-					"name": "PostBankAccount",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwtToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": 1,\r\n  \"accountNumber\": \"123456789\",\r\n  \"routingNumber\": \"987654321\",\r\n  \"isPrimary\": true,\r\n  \"employeeId\":1\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/api/v1/bankAccount",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"api",
-								"v1",
-								"bankAccount"
-							]
-						}
-					},
-					"response": []
+			"name": "UpdateUserInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
-			]
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -511,6 +368,10 @@
 			"key": "jwtToken",
 			"value": "",
 			"type": "default"
+		},
+		{
+			"key": "basePath",
+			"value": "http://localhost"
 		}
 	]
 }

@@ -19,18 +19,54 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@RequestMapping("/api/v1/permission")
 public class PermissionController {
     Logger logger = LoggerFactory.getLogger(PermissionController.class);
     @Autowired
     PermissionService permissionService;
 
 
-    @GetMapping("/api/v1/permission")
-    public ResponseEntity<List<PermissionDto>> getPermissions() {
+    @GetMapping("/getAllNonActive")
+    public ResponseEntity<List<PermissionDto>> getAllNonActive() {
         try {
 
             logger.info(String.format("Executing getRoles request"));
-            List<PermissionDto> permissionDtoList = permissionService.getAllPermissions();
+            List<PermissionDto> permissionDtoList = permissionService.getAllNonActive();
+            if (permissionDtoList.isEmpty()) {
+                logger.info(String.format("Leaving getRoles request - roles list is empty"));
+                //When you use ResponseEntity.noContent().build(), it creates a ResponseEntity with the HTTP status code 204 No Content and no body.
+                return ResponseEntity.noContent().build();
+            }
+            logger.info(String.format("Leaving getRoles request - with roles list"));
+            return ResponseEntity.ok().body(permissionDtoList);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/getAllActive")
+    public ResponseEntity<List<PermissionDto>> getAllActivePermissions() {
+        try {
+
+            logger.info(String.format("Executing getRoles request"));
+            List<PermissionDto> permissionDtoList = permissionService.getAllActive();
+            if (permissionDtoList.isEmpty()) {
+                logger.info(String.format("Leaving getRoles request - roles list is empty"));
+                return ResponseEntity.noContent().build();
+            }
+            logger.info(String.format("Leaving getRoles request - with roles list"));
+            return ResponseEntity.ok().body(permissionDtoList);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PermissionDto>> getAll() {
+        try {
+
+            logger.info(String.format("Executing getRoles request"));
+            List<PermissionDto> permissionDtoList = permissionService.getAll();
             if (permissionDtoList.isEmpty()) {
                 logger.info(String.format("Leaving getRoles request - roles list is empty"));
                 return ResponseEntity.noContent().build();
@@ -43,12 +79,12 @@ public class PermissionController {
     }
 
 
-    @GetMapping("/api/v1/permission/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PermissionDto> getPermission(@PathVariable("id") int permissionId) {
-        log.info("permission id receive - {}",permissionId);
-        PermissionDto permissionDto =  permissionService.getPermissionById(permissionId);
+        log.info("permission id receive - {}", permissionId);
+        PermissionDto permissionDto = permissionService.getPermissionById(permissionId);
 
-       return ResponseEntity.ok().body(permissionDto);
+        return ResponseEntity.ok().body(permissionDto);
     }
 
     @PostMapping("/api/v1/permission")
@@ -56,14 +92,14 @@ public class PermissionController {
         try {
             logger.info(String.format("permissionDto - " + permissionDto));
             permissionDto.setCreatedAt(System.currentTimeMillis());
-            PermissionDto permissionObj =  permissionService.save(permissionDto);
+            PermissionDto permissionObj = permissionService.save(permissionDto);
             return new ResponseEntity<>(permissionObj, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
 
-//    @PutMapping("/api/v1/users/{id}")
+    //    @PutMapping("/api/v1/users/{id}")
 //    public ResponseEntity<User> updateUser(@PathVariable("id") int userId) {
 //        System.out.println("User Id - " + userId);
 //        List<User> userList = new ArrayList<>();
@@ -74,11 +110,31 @@ public class PermissionController {
 //        return ResponseEntity.accepted().body(new User());
 //    }
 //
-    @DeleteMapping("/api/v1/permission/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") int permissionId) {
-        logger.info("permission id receive - {}",permissionId);
-        PermissionDto permissionDto =  permissionService.getPermissionById(permissionId);
-        permissionService.updatePermissionIsDeleted(permissionDto);
-       return ResponseEntity.ok().build();
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> softDeletePermission(@PathVariable("id") int permissionId) {
+        try {
+            logger.info("permission id receive - {}", permissionId);
+            PermissionDto permissionDto = permissionService.getPermissionById(permissionId);
+            if (permissionDto != null) {
+                permissionService.updatePermissionIsDeleted(permissionDto);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Resource with ID %s not found", permissionId));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @RequestMapping(value = "HardDeletePermission/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> DeletePermission(@PathVariable("id") long permissionId) {
+        try {
+            logger.info("permission id receive - {}", permissionId);
+            permissionService.hardDeletePermissionById(permissionId);
+            return ResponseEntity.ok().body(String.format("Resource with ID %s not found", permissionId));
+
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

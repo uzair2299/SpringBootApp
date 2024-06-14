@@ -8,3 +8,4 @@ CREATE TABLE permission (
     is_deleted BOOLEAN,
     description TEXT
 );
+

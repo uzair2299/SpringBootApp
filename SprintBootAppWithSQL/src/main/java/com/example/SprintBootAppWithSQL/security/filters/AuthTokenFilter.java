@@ -103,6 +103,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                //When implementing a custom authentication filter (e.g., JWT authentication filter), after validating the token and extracting user details, you need to set the authenticated user in the security context.
+                //If you don't set the authentication in the SecurityContextHolder, Spring Security will not recognize the user as authenticated, and the user will not have access to protected resources.
+                // is used in a filter after validating the user to ensure that Spring Security recognizes the user as authenticated for the current request and any subsequent processing within that request.
+                // It is essential to set the authentication in the SecurityContextHolder when manually authenticating users.
+                //This step ensures the authenticated user's information is available throughout the request lifecycle, enabling Spring Security to enforce authentication and authorization consistently.
+                //Without setting the authentication, users will not be recognized as authenticated, leading to access issues and inconsistent application behavior.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));

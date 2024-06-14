@@ -24,21 +24,51 @@ public class PermissionService {
     private EntityManager entityManager;
 
     //    @Cacheable(value = "allDataCache")
-    public List<PermissionDto> getAllPermissions() {
+    public List<PermissionDto> getAllNonActive() {
         log.info(String.format("Entering method in PermissionService.getAllPermissions()"));
 
         List<PermissionDto> permissionDtoList;
-        List<Permission> permissionList = permissionRepository.findByIsDeletedFalse();
+        List<Permission> permissionList = permissionRepository.getAllNonActive();
         permissionDtoList = MapperUtil.mapList(permissionList, PermissionDto.class);
         log.info(String.format("Leaving method in PermissionService.getAllPermissions()"));
         return permissionDtoList;
     }
 
+    public List<PermissionDto> getAll() {
+        log.info(String.format("Entering method in PermissionService.getAllPermissions()"));
+
+        List<PermissionDto> permissionDtoList;
+        List<Permission> permissionList = permissionRepository.getAll();
+        permissionDtoList = MapperUtil.mapList(permissionList, PermissionDto.class);
+        log.info(String.format("Leaving method in PermissionService.getAllPermissions()"));
+        return permissionDtoList;
+    }
+
+    public List<PermissionDto> getAllActive() {
+        log.info(String.format("Entering method in PermissionService.getAllPermissions()"));
+
+        List<PermissionDto> permissionDtoList;
+        List<Permission> permissionList = permissionRepository.getAllActive();
+        permissionDtoList = MapperUtil.mapList(permissionList, PermissionDto.class);
+        log.info(String.format("Leaving method in PermissionService.getAllPermissions()"));
+        return permissionDtoList;
+    }
+
+//    public PermissionDto getPermissionById(int permissionId) {
+//        Optional<Permission> permissionOptional = permissionRepository.findById(Long.valueOf(permissionId));
+//        if (permissionOptional.isPresent()) {
+//            Permission permission = permissionOptional.get();
+//            PermissionDto permissionDto = MapperUtil.mapObject(permission, PermissionDto.class);
+//            return permissionDto;
+//        } else {
+//            return null;
+//        }
+//    }
+
     public PermissionDto getPermissionById(int permissionId) {
-        Optional<Permission> permissionOptional = permissionRepository.findById(Long.valueOf(permissionId));
-        if (permissionOptional.isPresent()) {
-            Permission permission = permissionOptional.get();
-            PermissionDto permissionDto = MapperUtil.mapObject(permission, PermissionDto.class);
+       Permission permissionOptional = permissionRepository.getActivePermissionById(Long.valueOf(permissionId));
+        if (permissionOptional!=null) {
+            PermissionDto permissionDto = MapperUtil.mapObject(permissionOptional, PermissionDto.class);
             return permissionDto;
         } else {
             return null;
@@ -70,5 +100,9 @@ public class PermissionService {
         permission =  permissionRepository.save(permission);
         PermissionDto mapObject = MapperUtil.mapObject(permission, PermissionDto.class);
         return mapObject;
+    }
+
+    public void hardDeletePermissionById(long permissionId){
+        permissionRepository.hardDeletePermissionById(permissionId);
     }
 }
