@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.UUID;
 
+import static com.example.SprintBootAppWithSQL.config.appConst.ConstKey.CORRELATION_ID;
+import static com.example.SprintBootAppWithSQL.config.appConst.ConstKey.USER_NAME;
+
+@Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private AuthEntryPointJwt authEntryPoint;
@@ -48,7 +53,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         try {
 
-            handleMDC(request);
+            handleCoRelationMDC(request);
             // Get the authorization header from the request
             String authHeader = request.getHeader(AUTH_HEADER);
 
@@ -95,8 +100,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             if (jwtUtils.validateJwtToken(jwtToken, response)) {
                 // Get the user details from the token
-                String userName = jwtUtils.extractClaims(jwtToken).get("userName", String.class);
-
+                String userName = jwtUtils.extractClaims(jwtToken).get(USER_NAME, String.class);
+                handleUserNameMDC(userName);
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
 
                 // Set the authentication object in the security context
@@ -130,15 +135,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     }
 
-    private void handleMDC(HttpServletRequest request) {
-        String co_relationId = request.getHeader(CO_RELATION_ID);
+    private void handleCoRelationMDC(HttpServletRequest request) {
+        String co_relationId = request.getHeader(CORRELATION_ID);
         if (StringUtils.isNotBlank(co_relationId)) {
-            MDC.put("requestID", co_relationId);
+            MDC.put(CORRELATION_ID, co_relationId);
         } else {
             co_relationId = UUID.randomUUID().toString();
-            MDC.put("requestID", co_relationId);
+            MDC.put(CORRELATION_ID, co_relationId);
         }
     }
+    private void handleUserNameMDC(String userName) {
+
+        if (StringUtils.isNotBlank(userName)) {
+            MDC.put(USER_NAME, userName);
+        } else {
+            MDC.put(USER_NAME, "");
+        }
+    }
+
 
     private void clearMDC() {
         MDC.clear();

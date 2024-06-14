@@ -28,7 +28,6 @@ public class ResponseBodyAdviceAdaptor implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object object, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
 
-        HttpServletRequest httpServletRequest = ((ServletServerHttpRequest) serverHttpRequest).getServletRequest();
         HttpServletResponse httpServletResponse = ((ServletServerHttpResponse) serverHttpResponse).getServletResponse();
         httpServletResponse.getStatus();
         Gson gson = new GsonBuilder().serializeNulls().create();

@@ -1,32 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProperty name="springApplicationName" scope="context" source="application.name"/>
+    <springProperty name="appRollingFileName" scope="context" source="logging.rolling.file"/>
+    <springProperty name="rollingFileMaxHistory" scope="context" source="logging.rolling.file.max.history"/>
+    <springProperty name="rollingFileMaxSize" scope="context" source="logging.rolling.file.max.size"/>
 
-    <variable name="LOG_PATH" value="D:\logs" />
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
-        </encoder>
-    </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-<!--        <file>myApp.log</file>-->
-        <file>${LOG_PATH}\myapp.log</file>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-        <encoder>
-            <pattern>%date %level [%thread] %logger{10} [%file:%line] -%kvp- %msg%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-<!--            <fileNamePattern>application.%d{yyyy-MM-dd}.log</fileNamePattern>-->
-            <maxFileSize>1MB</maxFileSize>
-        </rollingPolicy>
-    </appender>
+    <springProfile name="dev,int,qa,pre">
+        <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="com.example.SprintBootAppWithSQL.config.MaskingPatternLayout">
+<!--                    <maskPattern>"body":\{([^$}]+)\}</maskPattern>-->
+<!--                    <maskPattern>"channelData":\{([^$}]+)\}</maskPattern>-->
+<!--                    <maskPattern>Customer\((.*?)\)</maskPattern>-->
+<!--                    <maskPattern>fromLabel":"([^"]+)</maskPattern>-->
 
-    <root level="info">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
-    </root>
+<!--                    <maskPattern>"customer"\s*:\s*\{([^$}]*)\}</maskPattern>-->
+<!--                    <maskPattern>"additionalDetail"\s*:\s*\{([^$}]*)\}</maskPattern>-->
+<!--                    <maskPattern>"senderName"\s*:\s*"([^"]*)"</maskPattern>-->
+                    <Pattern>%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(|) ${LOG_LEVEL_PATTERN:-%5p} %highlight(|) %cyan(%class{0}) %highlight(|) %magenta(%method | Line:%L) %highlight(|) %yellow(%X{correlationId}) %highlight(|)  %red(%thread)  %highlight(|) %blue(%X{userName}) %highlight(|) %m  %n</Pattern>
+                </layout>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>logs/${springApplicationName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${appRollingFileName}</fileNamePattern>
+                <maxHistory>${rollingFileMaxHistory}</maxHistory>
+                <totalSizeCap>${rollingFileMaxSize}</totalSizeCap>
+            </rollingPolicy>
+            <encoder>
+                <Pattern>%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(|) ${LOG_LEVEL_PATTERN:-%5p} %highlight(|) %cyan(%class{0}) %highlight(|) %magenta(%method | Line:%L) %highlight(|) %yellow(%X{correlationId}) %highlight(|)  %red(%thread)  %highlight(|) %blue(%X{AgentId}) %highlight(|) %m  %n</Pattern>
+            </encoder>
+        </appender>
+
+<!--        <logger name="" level="DEBUG">-->
+<!--            <appender-ref ref="FILE" />-->
+<!--        </logger>-->
+        <root level="INFO">
+            <appender-ref ref="stdout"/>
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
 </configuration>
 
 <!--If you need to apply customizations to logback beyond those that can be achieved with application.properties, you’ll need to add a standard logback configuration file.-->
