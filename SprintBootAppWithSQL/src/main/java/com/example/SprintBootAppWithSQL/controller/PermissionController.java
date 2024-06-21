@@ -102,13 +102,9 @@ public class PermissionController {
 
     @RequestMapping(value = "/updatePermission/{id}", method = RequestMethod.PUT)
     public ResponseEntity<String> updatePermission(@PathVariable Long id, @RequestBody PermissionDto permissionDto) {
+      permissionService.updatePermission(id,permissionDto);
 
-  log.info("hello");
-        //List<User> userList = new ArrayList<>();
-//        //User user = new User(UUID.randomUUID(), "ABC");
-//        User user1 = new User(UUID.randomUUID(), "ABC");
-//        userList.add(user1);
-//        userList.add(user);
+//write logic for update
         return ResponseEntity.ok().build();
     }
 
@@ -132,10 +128,12 @@ public class PermissionController {
         try {
             logger.info("permission id receive - {}", permissionId);
             permissionService.hardDeletePermissionById(permissionId);
-            return ResponseEntity.ok().body(String.format("Resource with ID %s not found", permissionId));
+            return ResponseEntity.ok().body(String.format("Resource with ID %s delete successfully", permissionId));
 
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            log.error("Going to log exception [{}]",e);
             return ResponseEntity.internalServerError().build();
         }
     }

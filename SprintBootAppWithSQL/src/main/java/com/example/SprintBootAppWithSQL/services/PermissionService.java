@@ -65,7 +65,7 @@ public class PermissionService {
 //        }
 //    }
 
-    public PermissionDto getPermissionById(int permissionId) {
+    public PermissionDto getPermissionById(long permissionId) {
        Permission permissionOptional = permissionRepository.getActivePermissionById(Long.valueOf(permissionId));
         if (permissionOptional!=null) {
             PermissionDto permissionDto = MapperUtil.mapObject(permissionOptional, PermissionDto.class);
@@ -75,6 +75,14 @@ public class PermissionService {
         }
     }
 
+
+    public void updatePermission(Long id, PermissionDto permissionDto){
+        PermissionDto permissionDtoResult =  this.getPermissionById(id);
+
+        MapperUtil.map(permissionDto,permissionDtoResult);
+        permissionDtoResult.setId(id);
+        save(permissionDtoResult);
+    }
     public List<Permission> saveAll(List<Permission> role) {
         return permissionRepository.saveAll(role);
     }
@@ -103,6 +111,7 @@ public class PermissionService {
     }
 
     public void hardDeletePermissionById(long permissionId){
-        permissionRepository.hardDeletePermissionById(permissionId);
+        permissionRepository.deleteById(permissionId);
+
     }
 }

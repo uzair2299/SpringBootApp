@@ -40,6 +40,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
     //@Query(value = "DELETE FROM public.permission where id=:id RETURNING 1",nativeQuery = true)
     @Query(value = "DELETE FROM public.permission where id=:id",nativeQuery = true)
-    void hardDeletePermissionById(@Param("id") Long id);
+    int hardDeletePermissionById(@Param("id") Long id);
 }
 
