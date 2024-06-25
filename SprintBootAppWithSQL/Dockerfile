@@ -1,8 +1,8 @@
 # Use an OpenJDK base image
 FROM openjdk:17-jdk-alpine
-
+VOLUME /SpringBootVolume/logs
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /uzair
 
 # Copy the packaged Spring Boot application JAR file into the container
 
@@ -36,3 +36,7 @@ ENTRYPOINT ["java", "-jar", "springBootApp.jar"]
 #docker logs -f <container_id or container_name> >> Monitor the logs continuously
 #docker container prune >> remove all stopped containers from your system
 #docker ps -a >> show list of all container including the stopped one
+
+
+
+#Docker containers are designed to run a single main process. When this main process exits, the container also stops. Docker monitors the main process (in this case, the Java process running your Spring Boot application) and stops the container when this process terminates.

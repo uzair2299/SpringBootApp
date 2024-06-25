@@ -1,10 +1,7 @@
 package com.example.SprintBootAppWithSQL.controller;
 
 import com.example.SprintBootAppWithSQL.dto.PermissionDto;
-import com.example.SprintBootAppWithSQL.dto.RoleDto;
-import com.example.SprintBootAppWithSQL.entities.Permission;
 import com.example.SprintBootAppWithSQL.services.PermissionService;
-import com.example.SprintBootAppWithSQL.services.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController

@@ -1,8 +1,8 @@
 package com.example.SprintBootAppWithSQL.applicationStartup;
 
 import com.example.SprintBootAppWithSQL.entities.*;
-import com.example.SprintBootAppWithSQL.repository.PermissionRepository;
 import com.example.SprintBootAppWithSQL.services.*;
+import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component

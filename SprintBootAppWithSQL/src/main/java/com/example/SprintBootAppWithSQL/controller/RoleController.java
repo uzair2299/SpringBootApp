@@ -1,11 +1,7 @@
 package com.example.SprintBootAppWithSQL.controller;
 
 import com.example.SprintBootAppWithSQL.dto.RoleDto;
-import com.example.SprintBootAppWithSQL.entities.Role;
-import com.example.SprintBootAppWithSQL.entities.User;
-import com.example.SprintBootAppWithSQL.repository.UserRepository;
-import com.example.SprintBootAppWithSQL.services.RoleService;
-import com.example.SprintBootAppWithSQL.services.UserService;
+import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class RoleController {

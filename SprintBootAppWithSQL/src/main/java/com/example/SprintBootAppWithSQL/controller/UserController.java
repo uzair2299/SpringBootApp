@@ -4,7 +4,7 @@ import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
-import com.example.SprintBootAppWithSQL.services.RoleService;
+import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

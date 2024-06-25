@@ -25,7 +25,7 @@
         </appender>
 
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>logs/${springApplicationName}.log</file>
+            <file>/SpringBootVolume/logs/${springApplicationName}.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <fileNamePattern>${appRollingFileName}</fileNamePattern>
                 <maxHistory>${rollingFileMaxHistory}</maxHistory>
