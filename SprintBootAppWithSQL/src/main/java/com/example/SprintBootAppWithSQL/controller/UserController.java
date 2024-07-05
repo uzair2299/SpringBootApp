@@ -42,7 +42,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getUsers/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);

@@ -42,7 +42,7 @@ public class User {
 
     //Use a Data Transfer Object (DTO) to return only the fields you need without triggering lazy loading of relationships.
     //Use @JsonIgnore to ignore the userRoles field during JSON serialization, which will prevent lazy loading.
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user" ,fetch = FetchType.LAZY)
     private Set<UserRoles> userRoles = new HashSet<>();
 
