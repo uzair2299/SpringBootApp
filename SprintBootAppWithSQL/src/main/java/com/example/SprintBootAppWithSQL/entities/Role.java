@@ -24,6 +24,7 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "role_name")
     private String roleName;
     private String description;
     @Column(name = "created_at")
@@ -33,12 +34,13 @@ public class Role implements Serializable {
     private Long updatedAt;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<UserRoles> userRoles = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "role")
-    private Set<RolesMenu> rolesMenus = new HashSet<>();
+//    @OneToMany(mappedBy = "role")
+//    private Set<RolesMenu> rolesMenus = new HashSet<>();
 
 
 //    @JsonIgnore

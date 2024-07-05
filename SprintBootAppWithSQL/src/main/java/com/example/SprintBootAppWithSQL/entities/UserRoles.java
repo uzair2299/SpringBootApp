@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +24,10 @@ public class UserRoles {
 //    private Long id;
 
     @EmbeddedId
+    @JsonIgnore
     private UserRoleId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
