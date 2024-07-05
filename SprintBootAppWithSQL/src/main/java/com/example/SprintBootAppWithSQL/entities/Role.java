@@ -19,17 +19,21 @@ import java.util.*;
         name = "GetUserById",
         procedureName = "GetEmployeesByDepartment"
 )
+@Table(name = "roles")
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roleName;
     private String description;
-    private Date createdAt;
-    private Date updatedAt;
+    @Column(name = "created_at")
+    private Long createdAt;
+
+    @Column(name = "updated_at")
+    private Long updatedAt;
 
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<UserRoles> userRoles = new HashSet<>();
 
 

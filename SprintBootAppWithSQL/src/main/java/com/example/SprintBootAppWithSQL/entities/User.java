@@ -1,5 +1,6 @@
 package com.example.SprintBootAppWithSQL.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,10 +35,15 @@ public class User {
     private String primaryPhone;
     private String secondaryPhone;
     private String workPhone;
+
+
     @Transient
     private List<Long> rolesId;
 
-    @OneToMany(mappedBy = "user")
+    //Use a Data Transfer Object (DTO) to return only the fields you need without triggering lazy loading of relationships.
+    //Use @JsonIgnore to ignore the userRoles field during JSON serialization, which will prevent lazy loading.
+
+    @OneToMany(mappedBy = "user" ,fetch = FetchType.LAZY)
     private Set<UserRoles> userRoles = new HashSet<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY)

@@ -1,3 +1,16 @@
+CREATE TABLE permission (
+    id BIGSERIAL PRIMARY KEY,
+    permission_name VARCHAR(255) NOT NULL,
+    code VARCHAR(100) UNIQUE,
+    module VARCHAR(255),
+    created_at BIGINT,
+    updated_at BIGINT,
+    is_deleted BOOLEAN,
+    description TEXT
+);
+
+
+
 INSERT INTO permission (permission_name, code, module, created_at, updated_at, is_deleted, description)
 VALUES
 ('VIEW', 'VIEW', 'General', EXTRACT(EPOCH FROM NOW()) * 1000, EXTRACT(EPOCH FROM NOW()) * 1000, TRUE, 'Permission to view/read data or content.'),

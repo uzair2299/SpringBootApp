@@ -18,20 +18,25 @@ import java.util.Set;
 @Entity
 @Table(name = "user_roles") // Renaming the table
 public class UserRoles {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+
+    @EmbeddedId
+    private UserRoleId id;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @MapsId("roleId")
     @JoinColumn(name = "role_id")
     private Role role;
 
-    private long createdDate;
-    private long updatedDate;
+//    private long createdDate;
+//    private long updatedDate;
 
 
 }
