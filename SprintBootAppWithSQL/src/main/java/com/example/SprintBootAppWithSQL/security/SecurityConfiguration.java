@@ -51,10 +51,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 
-        http.cors().and().csrf().disable()
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().requestMatchers("/api/v1/login/").permitAll()
+                .authorizeRequests().requestMatchers("/api/v1/login/").permitAll().requestMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated();
 
 
@@ -70,7 +70,10 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.setAllowCredentials(true);
+        //configuration.addAllowedOrigin("http://localhost:8081");
         configuration.addAllowedMethod("*");
+
         configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -25,7 +25,7 @@ public class jwtProperties {
     @Getter
     @Setter
     @Value("${jwt.expiry}")
-    private Integer expiry;
+    private Long expiry;
     @Getter
     @Setter
     @Value("${jwt.refresh.token.expiry}")
