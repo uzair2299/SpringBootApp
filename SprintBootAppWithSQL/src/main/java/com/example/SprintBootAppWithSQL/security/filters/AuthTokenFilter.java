@@ -57,6 +57,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             // Get the authorization header from the request
             String authHeader = request.getHeader(AUTH_HEADER);
 
+            if (authHeader == null) {
+                String token = request.getParameter("token");
+                // Log the token or process it as needed
+                System.out.println("Token from query parameter: " + token);
+                authHeader = token;
+            }
             String requestMethod = request.getMethod();
             String requestURL = request.getRequestURL().toString();
             String requestURI = request.getRequestURI();
