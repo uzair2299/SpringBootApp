@@ -55,7 +55,7 @@ public class LoginController {
            // sendEmail();
             LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
-            claims.put("userName","Testing");
+            claims.put("userName",result.getUserName());
             return new ResponseEntity<>(jwt.createToken(claims), HttpStatus.OK);
         } catch (BadCredentialsException | DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JwtDto().error(e.getMessage()));
