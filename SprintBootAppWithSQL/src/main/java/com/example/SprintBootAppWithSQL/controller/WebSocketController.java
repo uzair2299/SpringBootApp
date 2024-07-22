@@ -58,7 +58,7 @@ public class WebSocketController {
         return message;
     }
 
-   // @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 3000)
     public void sendPeriodicMessages() {
         Message message = new Message();
         message.setTimeStamp(System.currentTimeMillis());

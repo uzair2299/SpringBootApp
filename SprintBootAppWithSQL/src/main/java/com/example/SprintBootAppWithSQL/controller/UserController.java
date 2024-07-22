@@ -75,25 +75,20 @@ public class UserController {
     public ResponseEntity<List<Role>> getUserRoles(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);
-            List<Object[]> results = userRolesRepository.findByUserId_(userId);
+            List<Role> results = roleService.userRoles(userId);
 
 
-          List<Role> roleList =   results.stream().map(result -> {
-                Role role = new Role();
-                role.setId((Long) result[0]);
-                role.setRoleName((String) result[1]);
-                return role;
-            }).collect(Collectors.toList());
-                System.out.println("User Id - " + userId);
-                System.out.println("User Id - " + userId);
-                System.out.println("User Id - " + userId);
-                System.out.println("User Id - " + userId);
-                System.out.println("User Id - " + userId);
-                System.out.println("User Id - " + userId);
+//          List<Role> roleList =   results.stream().map(result -> {
+//                Role role = new Role();
+//                role.setId((Long) result[0]);
+//                role.setRoleName((String) result[1]);
+//                return role;
+//            }).collect(Collectors.toList());
+
                 //In the context of a Spring Boot application, serialization to JSON typically occurs when the ResponseEntity is being prepared for return to the client. This process is managed by the Spring framework, which uses the Jackson library by default to convert the Java object into a JSON representation
                 //The actual conversion to JSON is handled by Jackson. When Jackson serializes the User object, it will attempt to access all non-ignored fields. If any of these fields are lazily loaded collections or associations, accessing them will trigger the lazy loading query.
                 //To prevent the lazy loading query for the userRoles field, use the @JsonIgnore annotation. This will ensure that Jackson ignores this field during serialization, thus preventing the lazy loading query from running.
-                return ResponseEntity.ok().body(roleList);
+                return ResponseEntity.ok().body(results);
 
                } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

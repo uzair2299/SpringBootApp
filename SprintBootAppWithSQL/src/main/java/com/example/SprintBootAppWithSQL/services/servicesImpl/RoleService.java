@@ -75,4 +75,9 @@ public class RoleService {
         return roles;
     }
 
+    public List<Role> userRoles(long userId)
+    {
+        return roleRepository.findByUserId_(userId);
+    }
+
 }

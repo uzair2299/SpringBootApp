@@ -1,0 +1,3 @@
+SELECT r.id,r.resource_name, p.id,p.permission_name FROM public.resources r
+JOIN resources_permissions rp ON rp.resource_id =r.id
+JOIN permission p ON rp.permission_id =p.id

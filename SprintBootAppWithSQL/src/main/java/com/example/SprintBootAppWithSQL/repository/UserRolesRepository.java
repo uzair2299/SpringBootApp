@@ -19,7 +19,7 @@ public interface UserRolesRepository extends JpaRepository<UserRoles, UserRoleId
     @Query(value = "SELECT r.id,r.role_Name FROM public.roles r\n" +
             "JOIN user_roles ur ON ur.role_id = r.id\n" +
             "WHERE ur.user_id =:userId",nativeQuery = true)
-    List<Object[]>  findByUserId_(@Param("userId") long userId);
+    List<Role>  findByUserId_(@Param("userId") long userId);
     
 }
 

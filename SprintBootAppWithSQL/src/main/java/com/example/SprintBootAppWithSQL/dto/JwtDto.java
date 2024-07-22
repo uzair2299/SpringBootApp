@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Setter
 @Getter
@@ -13,6 +16,8 @@ public class JwtDto {
     private String token;
     private String refreshToken;
     private String error;
+
+    List<MenuDto> menuList = new ArrayList<>();
 
     public JwtDto token(String token) {
         this.token = token;

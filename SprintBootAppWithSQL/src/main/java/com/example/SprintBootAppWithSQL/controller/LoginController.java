@@ -3,6 +3,7 @@ package com.example.SprintBootAppWithSQL.controller;
 import com.example.SprintBootAppWithSQL.config.PropService;
 import com.example.SprintBootAppWithSQL.dto.JwtDto;
 import com.example.SprintBootAppWithSQL.dto.LoginDto;
+import com.example.SprintBootAppWithSQL.services.MenuService;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
 import jakarta.validation.Valid;
@@ -30,7 +31,6 @@ import java.util.Properties;
 @Slf4j
 @RestController
 public class LoginController {
-    Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     jwtImpl jwt;
 
@@ -39,6 +39,10 @@ public class LoginController {
     PropService propService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    MenuService menuService;
+
 
 
     //TODO
@@ -56,7 +60,9 @@ public class LoginController {
             LoginDto result = userService.getUserByUserName(user);
             Map<String, Object> claims = new HashMap<>();
             claims.put("userName",result.getUserName());
-            return new ResponseEntity<>(jwt.createToken(claims), HttpStatus.OK);
+            JwtDto loginResponse =  jwt.createToken(claims);
+            loginResponse.setMenuList(menuService.getUserMenu());
+            return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } catch (BadCredentialsException | DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JwtDto().error(e.getMessage()));
         } catch (LockedException e) {

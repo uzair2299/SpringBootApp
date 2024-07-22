@@ -15,10 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@NamedStoredProcedureQuery(
-        name = "GetUserById",
-        procedureName = "GetEmployeesByDepartment"
-)
+
 @Table(name = "roles")
 public class Role implements Serializable {
     @Id
@@ -27,9 +24,8 @@ public class Role implements Serializable {
     @Column(name = "role_name")
     private String roleName;
     private String description;
-    @Column(name = "created_at")
+    @Column(name = "created_at",nullable = true)
     private Long createdAt;
-
     @Column(name = "updated_at")
     private Long updatedAt;
 

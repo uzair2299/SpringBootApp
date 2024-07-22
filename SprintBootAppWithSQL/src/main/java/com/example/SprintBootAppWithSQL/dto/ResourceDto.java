@@ -1,58 +1,42 @@
-package com.example.SprintBootAppWithSQL.entities;
+package com.example.SprintBootAppWithSQL.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "resources")
-public class Resource {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//When you use @JsonInclude(JsonInclude.Include.NON_NULL) on a class or property, it tells Jackson to skip any properties that have null values during serialization. This can help reduce the size of the JSON output and avoid sending unnecessary null values in the API responses.
+@Data
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ResourceDto {
+
     private Long resourceId;
 
-    @Column(nullable = false)
     private String resourceName;
 
-    @Column(nullable = false)
     private String resourceEndpoint;
 
-    @Column(nullable = false)
     private String version;
 
-    @Column(nullable = false)
     private boolean isActive;
 
-    @Column(nullable = false)
     private String methodType;  // GET, POST, PUT, DELETE, etc.
 
-    @Column(nullable = true)
     private String description;
 
-    @Column(nullable = false)
     private boolean isAuthRequired;
 
-    @Column(nullable = true)
     private Integer rateLimit;
 
-    @Column(nullable = false)
     private boolean isDeprecated;
 
-    @Column(nullable = true)
     private String documentationUrl;
 
-    @Column(nullable = true)
     private String owner;
 
-
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "resource_permissions",
-//            joinColumns = @JoinColumn(name = "resource_id"),
-//            inverseJoinColumns = @JoinColumn(name = "permission_id")
-//    )
-//    private List<Permission> permissions;
-
+    private List<PermissionDto> permissions = new ArrayList<>();
 }
