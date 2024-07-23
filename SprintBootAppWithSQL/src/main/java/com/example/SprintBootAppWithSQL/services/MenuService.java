@@ -32,6 +32,7 @@ public class MenuService {
             menuDto.setLevel((Integer) result[2]);
             menuDto.setParent_id((Integer) Objects.requireNonNullElse(result[2], 0));
             menuDto.setLink((String) result[4]);
+            menuDto.setIcon((String) result[5]);
             menuDtoList.add(menuDto);
         }
 

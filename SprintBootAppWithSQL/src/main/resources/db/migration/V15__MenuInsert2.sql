@@ -1,0 +1,1 @@
+INSERT INTO Menu (name, link, icon, parent_id, status) VALUES ('Send Us Feedback', '/settings','feedback', 1, 1);

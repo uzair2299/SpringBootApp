@@ -158,6 +158,19 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.0</version>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>8.5.13</version>
+                <configuration>
+                    <url>jdbc:postgresql://192.168.100.7:5432/PointOfSale</url>
+                    <user>postgres</user>
+                    <password>root</password>
+                    <locations>
+                        <location>classpath:db/migration</location>
+                    </locations>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

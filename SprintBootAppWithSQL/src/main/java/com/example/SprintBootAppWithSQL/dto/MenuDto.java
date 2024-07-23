@@ -17,5 +17,6 @@ public class MenuDto {
     private String link;
     private int parent_id;
     private int level;
+    private String icon;
     private List<MenuDto> children;
 }
