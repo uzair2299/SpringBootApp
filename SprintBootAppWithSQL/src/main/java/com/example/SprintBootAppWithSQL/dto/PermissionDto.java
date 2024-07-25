@@ -6,10 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Data
+@Getter
+@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PermissionDto {
     private Long id;
@@ -20,4 +24,5 @@ public class PermissionDto {
     private Long createdAt;
     private Long updatedAt;
     private String description;
+    private boolean isChecked;
 }

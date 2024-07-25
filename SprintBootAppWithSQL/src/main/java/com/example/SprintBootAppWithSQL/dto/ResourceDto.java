@@ -10,8 +10,6 @@ import java.util.List;
 
 //When you use @JsonInclude(JsonInclude.Include.NON_NULL) on a class or property, it tells Jackson to skip any properties that have null values during serialization. This can help reduce the size of the JSON output and avoid sending unnecessary null values in the API responses.
 @Data
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResourceDto {
 
     private Long resourceId;

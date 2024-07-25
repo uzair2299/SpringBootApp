@@ -25,8 +25,7 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
             "ORDER BY id ASC ",nativeQuery = true)
     List<Permission> getAllNonActive();
 
-    @Query(value = "SELECT * FROM public.permission where is_deleted = true\n" +
-            "ORDER BY id ASC ",nativeQuery = true)
+    @Query(value = "SELECT * FROM public.permission where is_deleted = true",nativeQuery = true)
     List<Permission> getAllActive();
 
     @Query(value = "SELECT * FROM public.permission ORDER BY id ASC ",nativeQuery = true)

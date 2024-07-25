@@ -1,24 +1,34 @@
 package com.example.SprintBootAppWithSQL.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "resources")
-public class Resource {
+public class Resource implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long resourceId;
+    private Long Id;
 
-    @Column(nullable = false)
+    @Column(name = "resource_name",nullable = false)
+
     private String resourceName;
 
-    @Column(nullable = false)
+    @Column(name="resource_endpoint",nullable = false)
     private String resourceEndpoint;
 
-    @Column(nullable = false)
+    @Column(name = "version",nullable = false)
+
     private String version;
 
     @Column(nullable = false)
