@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
 import jakarta.persistence.EntityManager;
 
 @Service
@@ -35,18 +36,23 @@ public class RoleService {
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-//    @Cacheable(value = "allDataCache")
+    //    @Cacheable(value = "allDataCache")
     public List<RoleDto> getAllRoles() {
         logger.info(String.format("Entering method in RoleService.getAllRoles()"));
-        //StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("GetUserById");
-        //query.execute();
-        //List<Role> roles = query.getResultList();
-
         List<RoleDto> roleDtoList;
         List<Role> roleList = roleRepository.findAll();
-        roleDtoList = MapperUtil.mapList(roleList,RoleDto.class);
+        roleDtoList = MapperUtil.mapList(roleList, RoleDto.class);
         logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
         return roleDtoList;
+    }
+
+    public RoleDto getRoleById(Long roleId) {
+        logger.info(String.format("Entering method in RoleService.getAllRoles()"));
+
+        Role role = roleRepository.getRoleById(roleId);
+        RoleDto roleDto = MapperUtil.mapObject(role, RoleDto.class);
+        logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
+        return roleDto;
     }
 
 
@@ -56,7 +62,7 @@ public class RoleService {
     }
 
     public RoleDto createRole(RoleDto roleDto) {
-        Role role =  MapperUtil.mapObject(roleDto,Role.class);
+        Role role = MapperUtil.mapObject(roleDto, Role.class);
         Role savedRole = roleRepository.save(role);
         RoleDto savedRoleDto = MapperUtil.mapObject(savedRole, RoleDto.class);
         return savedRoleDto;
@@ -75,9 +81,13 @@ public class RoleService {
         return roles;
     }
 
-    public List<Role> userRoles(long userId)
-    {
+    public List<Role> userRoles(long userId) {
         return roleRepository.findByUserId_(userId);
+    }
+
+
+    public List<Object[]> getRoleResourcePermission(Long roleId, String endPoint) {
+        return roleRepository.getRoleResourcePermission(roleId, endPoint);
     }
 
 }

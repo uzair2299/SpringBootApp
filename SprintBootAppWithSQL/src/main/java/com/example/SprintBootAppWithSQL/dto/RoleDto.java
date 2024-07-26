@@ -12,7 +12,6 @@ import java.util.List;
 public class RoleDto {
     private Long id;
     private String roleName;
-    private String permissionName;
     private String description;
     private Date createdAt;
     private Date updatedAt;
