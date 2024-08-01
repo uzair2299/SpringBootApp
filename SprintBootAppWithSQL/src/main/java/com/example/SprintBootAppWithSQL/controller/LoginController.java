@@ -3,9 +3,11 @@ package com.example.SprintBootAppWithSQL.controller;
 import com.example.SprintBootAppWithSQL.config.PropService;
 import com.example.SprintBootAppWithSQL.dto.JwtDto;
 import com.example.SprintBootAppWithSQL.dto.LoginDto;
+import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.services.MenuService;
 import com.example.SprintBootAppWithSQL.services.UserService;
 import com.example.SprintBootAppWithSQL.services.jwt.jwtImpl;
+import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -43,6 +46,9 @@ public class LoginController {
     @Autowired
     MenuService menuService;
 
+    @Autowired
+    RoleService roleService;
+
 
 
     //TODO
@@ -58,8 +64,13 @@ public class LoginController {
         try {
            // sendEmail();
             LoginDto result = userService.getUserByUserName(user);
+            List<Role> roles = roleService.getUserRoles(result.getId());
             Map<String, Object> claims = new HashMap<>();
+
             claims.put("userName",result.getUserName());
+            claims.put("userName",result.getUserName());
+            claims.put("userRoles",roles);
+
             JwtDto loginResponse =  jwt.createToken(claims);
             loginResponse.setMenuList(menuService.getUserMenu());
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);

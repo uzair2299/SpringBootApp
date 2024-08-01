@@ -75,7 +75,7 @@ public class UserController {
     public ResponseEntity<List<Role>> getUserRoles(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);
-            List<Role> results = roleService.userRoles(userId);
+            List<Role> results = roleService.getUserRoles(userId);
 
 
 //          List<Role> roleList =   results.stream().map(result -> {

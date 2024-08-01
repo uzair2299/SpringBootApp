@@ -81,13 +81,13 @@ public class RoleService {
         return roles;
     }
 
-    public List<Role> userRoles(long userId) {
-        return roleRepository.findByUserId_(userId);
+    public List<Role> getUserRoles(long userId) {
+        return roleRepository.getUserRoles(userId);
     }
 
 
-    public List<Object[]> getRoleResourcePermission(Long roleId, String endPoint) {
-        return roleRepository.getRoleResourcePermission(roleId, endPoint);
+    public List<Object[]> getRoleResourcePermission(RoleDto roleDto) {
+        return roleRepository.getRoleResourcePermission(roleDto.getRoleIds(), roleDto.getEndPoint());
     }
 
 }

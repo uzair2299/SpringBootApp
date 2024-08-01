@@ -22,7 +22,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Query(value = "SELECT r.id,r.role_Name,r.created_at,r.description,r.updated_at FROM public.roles r\n" +
             "JOIN user_roles ur ON ur.role_id = r.id\n" +
             "WHERE ur.user_id =:userId",nativeQuery = true)
-    List<Role>  findByUserId_(@Param("userId") long userId);
+    List<Role>  getUserRoles(@Param("userId") long userId);
 
     @Query(value = "SELECT * FROM public.roles where id=:id",nativeQuery = true)
     Role getRoleById(@Param("id") Long id);
@@ -45,8 +45,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             "JOIN resources_permissions rp ON rp.id = rrp.resources_permissions_id\n" +
             "JOIN public.permission  p ON p.id =rp.permission_id \n" +
             "JOIN resources re ON r.id = rp.resource_id\n" +
-            "WHERE r.id =:roleId  AND re.resource_endpoint = :endPoint",nativeQuery = true)
-    List<Object[]>  getRoleResourcePermission(@Param("roleId") long roleId,@Param("endPoint") String endPoint);
+            "WHERE r.id IN :roleIds  AND re.resource_endpoint = :endPoint",nativeQuery = true)
+    List<Object[]>  getRoleResourcePermission(@Param("roleIds") List<Long> roleIds,@Param("endPoint") String endPoint);
 
 
 }

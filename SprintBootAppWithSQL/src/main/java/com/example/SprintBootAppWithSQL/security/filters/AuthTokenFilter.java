@@ -1,9 +1,14 @@
 package com.example.SprintBootAppWithSQL.security.filters;
 
+import com.example.SprintBootAppWithSQL.dto.RoleDto;
+import com.example.SprintBootAppWithSQL.dto.RoleResourcePermissionDTO;
+import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.security.AuthEntryPointJwt;
 import com.example.SprintBootAppWithSQL.services.UserDetailsImpl;
 import com.example.SprintBootAppWithSQL.services.UserDetailsServiceImpl;
+import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import com.example.SprintBootAppWithSQL.util.JwtUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +30,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.SprintBootAppWithSQL.config.appConst.ConstKey.CORRELATION_ID;
 import static com.example.SprintBootAppWithSQL.config.appConst.ConstKey.USER_NAME;
@@ -41,6 +46,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private static final String TOKEN_PREFIX = "Bearer ";
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    RoleService roleService;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -72,13 +80,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String contextPath = request.getContextPath();
 
 
-
             StringBuilder baseFQDN = new StringBuilder();
             baseFQDN.append(scheme).append("://").append(serverName);
             baseFQDN.append(":").append(serverPort);
             baseFQDN.append(contextPath);
             log.info(String.format("Request Receive at filter %n authHeader - [%s],%n requestURL - [%s],%n requestURI - [%s],%n requestMethod - [%s],%n scheme - [%s],%n serverName - [%s],%n serverPort - [%s],%n contextPath - [%s],%n baseFQDN - [%s]",
-                    authHeader, requestURL, requestURI, requestMethod, scheme, serverName, serverPort, contextPath,baseFQDN));
+                    authHeader, requestURL, requestURI, requestMethod, scheme, serverName, serverPort, contextPath, baseFQDN));
 
 
             if (isLoginRequest(requestURL, requestURI)) {
@@ -91,6 +98,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             // If the header is null or doesn't start with "Bearer "
             if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
                 authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
@@ -101,6 +109,54 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwtUtils.validateJwtToken(jwtToken, response)) {
                 // Get the user details from the token
                 String userName = jwtUtils.extractClaims(jwtToken).get(USER_NAME, String.class);
+                Claims claims = jwtUtils.extractClaims(jwtToken);
+                List<Map<String, Object>> roleMaps = (List<Map<String, Object>>) claims.get("userRoles");
+
+                List<Role> roles = roleMaps.stream()
+                        .map(this::convertMapToRole)
+                        .collect(Collectors.toList());
+                List<Long> ids = new ArrayList<>();
+
+                for(Role item : roles){
+                    ids.add(item.getId());
+                }
+
+                //List<Role> roles = jwtUtils.extractClaims(jwtToken).get("userRoles", List.class);
+//                List<Long> ids = roles.stream()
+//                        .map(Role::getId)
+//                        .filter(Objects::nonNull) // Exclude null IDs
+//                        .collect(Collectors.toList());
+
+                RoleDto roleDto = new RoleDto();
+                roleDto.setRoleIds(ids);
+                roleDto.setEndPoint(requestURI);
+                List<Object[]> o =  roleService.getRoleResourcePermission(roleDto);
+                List<RoleResourcePermissionDTO> roleDto_ = new ArrayList<>();
+
+                for(Object[] item :o){
+                    RoleResourcePermissionDTO permissionDTO = new RoleResourcePermissionDTO();
+                    permissionDTO.setRRoleId((Long) item[0]);
+                    permissionDTO.setRoleName((String) item[1]);
+                    permissionDTO.setRrpRoleId(Long.valueOf((Integer) item[2]));
+                    permissionDTO.setRrpResourcesPermissionsId(Long.valueOf((Integer) item[3]));
+                    permissionDTO.setRpId((Long) item[4]);
+                    permissionDTO.setRpResourceId(Long.valueOf((Integer) item[5]));
+
+                    permissionDTO.setRpPermissionId(Long.valueOf((Integer) item[6]));
+                    permissionDTO.setPermissionName((String) item[7]);
+                    permissionDTO.setPId((Long) item[8]);
+                    permissionDTO.setReId(Long.valueOf((Integer) item[9]));
+                    permissionDTO.setResourceName((String) item[10]);
+                    permissionDTO.setMethodType((String) item[11]);
+                    permissionDTO.setResourceEndpoint((String) item[12]);
+                    roleDto_.add(permissionDTO);
+
+                }
+
+                if(roleDto_.isEmpty()){
+                    authEntryPoint.commence(request, response, new BadCredentialsException("You lack the necessary permissions for this action. Contact your administrator for assistance"));
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                }
                 handleUserNameMDC(userName);
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
 
@@ -117,14 +173,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 authEntryPoint.commence(request, response, new BadCredentialsException("Invalid or missing authorization header"));
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
             // Check if the user has the required authority based on request method and URI
-            if (!hasAuthority(requestMethod, requestURI)) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return;
-            }
+
 
             //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
             filterChain.doFilter(request, response);
@@ -144,6 +198,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             MDC.put(CORRELATION_ID, co_relationId);
         }
     }
+
     private void handleUserNameMDC(String userName) {
 
         if (StringUtils.isNotBlank(userName)) {
@@ -196,7 +251,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         //Login requests may include specific headers or header values that indicate they are related to authentication or login. You can inspect the request headers using request.getHeader("headerName") and check for any login-related headers or specific header values.
         return requestURL.contains("/login") || requestURI.contains("/login");
     }
-
+    private Role convertMapToRole(Map<String, Object> map) {
+        Role role = new Role();
+        // Assuming Role has setters for id and other properties
+        role.setId(((Number) map.get("id")).longValue()); // Adjust field names as needed
+        role.setRoleName((String) map.get("name")); // Adjust field names as needed
+        return role;
+    }
 }
 
 

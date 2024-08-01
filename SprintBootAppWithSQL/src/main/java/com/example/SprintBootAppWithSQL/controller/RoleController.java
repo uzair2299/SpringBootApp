@@ -65,30 +65,11 @@ public class RoleController {
     }
 
 
-//    SELECT r.id AS r_role_id,\n" +
-//            "r.role_name,\n" +
 
-//            "rrp.role_id AS rrp_role_id,\n" +
-
-//            "rrp.resources_permissions_id AS rrp_resources_permissions_id,\n" +
-
-//            "rp.id AS rp_id,\n" +
-
-//            "rp.resource_id AS rp_resource_id,\n" +
-
-//            "rp.permission_id AS rp_permission_id,\n" +
-
-//            "p.permission_name,\n" +
-
-//            "p.id AS p_id,\n" +
-
-//            "re.id AS re_id,\n" +
-//            "re.resource_name,\n" +
-//            "re.method_type,\n" +
-//            "re.resource_endpoint\n" +
-    @GetMapping("/getRoleResourcePermission")
-    public ResponseEntity<List<RoleResourcePermissionDTO>>  getRoleResourcePermission(@RequestParam("roleId") long roleId, @RequestParam("endPoint") String endPoint){
-        List<Object[]> o =  roleService.getRoleResourcePermission(roleId,endPoint);
+    //@GetMapping("/getRoleResourcePermission")
+    @RequestMapping(value = "/getRoleResourcePermission", method = RequestMethod.POST)
+    public ResponseEntity<List<RoleResourcePermissionDTO>>  getRoleResourcePermission(@RequestBody RoleDto roleDtos){
+        List<Object[]> o =  roleService.getRoleResourcePermission(roleDtos);
         List<RoleResourcePermissionDTO> roleDto = new ArrayList<>();
 
         for(Object[] item :o){
