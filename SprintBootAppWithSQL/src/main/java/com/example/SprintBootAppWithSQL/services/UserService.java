@@ -1,7 +1,11 @@
 package com.example.SprintBootAppWithSQL.services;
 
 import com.example.SprintBootAppWithSQL.dto.LoginDto;
+import com.example.SprintBootAppWithSQL.dto.PermissionDto;
+import com.example.SprintBootAppWithSQL.dto.ResourcePermissionDto;
 import com.example.SprintBootAppWithSQL.dto.UserDto;
+import com.example.SprintBootAppWithSQL.entities.BankAccount;
+import com.example.SprintBootAppWithSQL.entities.Employee;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.UserRepository;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
@@ -13,6 +17,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,13 @@ public class UserService {
         List<User> userList = new ArrayList<User>();
         userList = userRepository.findAll();
         return userList;
+    }
+
+    public List<UserDto> getAllAppUsers() {
+        List<User> userList = userRepository.getAllUsers();
+        List<UserDto> userDtoList = MapperUtil.mapList(userList, UserDto.class);
+        return userDtoList;
+
     }
 
     public User saveUser(User user) {
@@ -66,4 +78,14 @@ public class UserService {
         userRepository.saveAndFlush(result);
         return user;
     }
+
+    @Transactional
+    public void insertBulkUser(List<UserDto> userDtoList) {
+
+        for (UserDto item : userDtoList) {
+            // userRepository.insertBulkUser(item.getUserName(),item.getFirstName(),item.getLastName());
+
+        }
+    }
 }
+

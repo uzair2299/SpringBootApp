@@ -1,6 +1,7 @@
 package com.example.SprintBootAppWithSQL.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,10 +12,11 @@ public class UserDto {
     private String userName;
     private String firstName;
     private String lastName;
+    @JsonIgnore
     private String password;
     private String email;
-    private Date dateJoined;
-    private Date lastLogin;
+    private Long dateJoined;
+    private Long lastLogin;
     private Boolean isActive;
     private Boolean isLocked;
     private String profilePicture;

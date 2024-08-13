@@ -10,5 +10,5 @@ CREATE TABLE Roles_Resources_Permissions (
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
-INSERT INTO Roles_Resources_Permissions (resources_permissions_id, role_id)
-VALUES(71, 1)
+--INSERT INTO Roles_Resources_Permissions (resources_permissions_id, role_id)
+--VALUES(71, 1)

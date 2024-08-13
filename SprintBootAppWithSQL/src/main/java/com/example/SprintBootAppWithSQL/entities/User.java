@@ -26,8 +26,8 @@ public class User {
     private String lastName;
     private String password;
     private String email;
-    private Date dateJoined;
-    private Date lastLogin;
+    private Long dateJoined;
+    private Long lastLogin;
     private Boolean isActive;
     private Boolean isLocked;
     private String profilePicture;

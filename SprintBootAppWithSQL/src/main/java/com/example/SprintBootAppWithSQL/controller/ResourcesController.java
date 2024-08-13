@@ -30,6 +30,8 @@ import java.util.*;
 @RequestMapping("/api/v1/resources")
 @Slf4j
 public class ResourcesController {
+
+
     @Autowired
     ResourcesRepository resourcesRepository;
 
@@ -168,4 +170,12 @@ public class ResourcesController {
 //            return ResponseEntity.internalServerError().build();
 //        }
 //    }
+
+
+    @RequestMapping(value = "/createResource", method = RequestMethod.POST)
+    ResponseEntity<String> createResource(@RequestBody ResourceDto resourceDto){
+
+        resourcesService.createResource(resourceDto);
+        return ResponseEntity.ok().build();
+    }
 }

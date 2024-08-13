@@ -93,4 +93,8 @@ public class ResourcesService {
         }
     }
 
+    public void createResource(ResourceDto resourceDto) {
+
+        resourcesRepository.createResource(resourceDto.getResourceName(),resourceDto.getResourceEndpoint(),resourceDto.getVersion(),resourceDto.getMethodType(),resourceDto.isActive(),resourceDto.isAuthRequired(),resourceDto.isDeprecated());
+    }
 }

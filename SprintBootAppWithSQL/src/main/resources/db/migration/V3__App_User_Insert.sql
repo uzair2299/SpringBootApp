@@ -19,8 +19,8 @@ INSERT INTO app_user (
     'Doe',
     '$2a$10$DowrX0AfF/nDZ8D0czB..uz/6vplU9l1QbZBD3MLF2/yyROFpAGTC',
     'john.doe@example.com',
-    '2024-05-17 10:00:00',
-    NULL,
+    EXTRACT(EPOCH FROM NOW()) * 1000,
+    EXTRACT(EPOCH FROM NOW()) * 1000,
     true,
     false,
     'profile_pic.jpg',
@@ -28,4 +28,34 @@ INSERT INTO app_user (
     '1234567890',
     '0987654321',
     '1122334455'
-);
+),(
+      'testing',
+      'testing',
+      'testing',
+      '$2a$10$DowrX0AfF/nDZ8D0czB..uz/6vplU9l1QbZBD3MLF2/yyROFpAGTC',
+      'testing@example.com',
+      EXTRACT(EPOCH FROM NOW()) * 1000,
+      EXTRACT(EPOCH FROM NOW()) * 1000,
+      true,
+      false,
+      'profile_pic.jpg',
+      'A short bio about John Doe.',
+      '1234567890',
+      '0987654321',
+      '1122334455'
+  ),(
+          'uzair',
+          'anwar',
+          'abc',
+          '$2a$10$DowrX0AfF/nDZ8D0czB..uz/6vplU9l1QbZBD3MLF2/yyROFpAGTC',
+          'uzair@example.com',
+          EXTRACT(EPOCH FROM NOW()) * 1000,
+          EXTRACT(EPOCH FROM NOW()) * 1000,
+          true,
+          false,
+          'profile_pic.jpg',
+          'A short bio about John Doe.',
+          '1234567890',
+          '0987654321',
+          '1122334455'
+      );

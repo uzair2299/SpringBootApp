@@ -1,14 +1,10 @@
 package com.example.SprintBootAppWithSQL.repository;
 
-import com.example.SprintBootAppWithSQL.dto.ResourceDto;
-import com.example.SprintBootAppWithSQL.entities.Permission;
 import com.example.SprintBootAppWithSQL.entities.Resource;
-import com.example.SprintBootAppWithSQL.entities.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -48,6 +44,10 @@ public interface ResourcesRepository extends JpaRepository<Resource, Long> {
     void assignResourcePermission(Long permission_id,Long resource_id);
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO resources(resource_name,resource_endpoint,version,method_type,is_active,is_auth_required,is_deprecated) VALUES(:resourceName,:resourceEndpoint,:version,:methodType,:active,:authRequired,:deprecated)",nativeQuery = true)
+    void createResource(String resourceName, String resourceEndpoint, String version, String methodType, boolean active, boolean authRequired, boolean deprecated);
 
 //    @Query(value = "SELECT * FROM public.permission where is_deleted = false\n" +
 //            "ORDER BY id ASC ",nativeQuery = true)

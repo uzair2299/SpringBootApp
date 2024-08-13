@@ -153,10 +153,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 }
 
-                if(roleDto_.isEmpty()){
-                    authEntryPoint.commence(request, response, new BadCredentialsException("You lack the necessary permissions for this action. Contact your administrator for assistance"));
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                }
+//                if(roleDto_.isEmpty()){
+//                    authEntryPoint.commence(request, response, new BadCredentialsException("You lack the necessary permissions for this action. Contact your administrator for assistance"));
+//                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                }
                 handleUserNameMDC(userName);
                 UserDetailsImpl userDetails = userDetailsService.loadUserByUsername("ABC");
 
