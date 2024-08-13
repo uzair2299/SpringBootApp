@@ -19,5 +19,6 @@ public class RoleDto {
     private Date createdAt;
     private Date updatedAt;
     private String endPoint;
+    private boolean isChecked;
     private List<Long> roleIds;
 }

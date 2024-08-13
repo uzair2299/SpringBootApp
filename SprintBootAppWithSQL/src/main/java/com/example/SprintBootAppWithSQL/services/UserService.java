@@ -1,9 +1,6 @@
 package com.example.SprintBootAppWithSQL.services;
 
-import com.example.SprintBootAppWithSQL.dto.LoginDto;
-import com.example.SprintBootAppWithSQL.dto.PermissionDto;
-import com.example.SprintBootAppWithSQL.dto.ResourcePermissionDto;
-import com.example.SprintBootAppWithSQL.dto.UserDto;
+import com.example.SprintBootAppWithSQL.dto.*;
 import com.example.SprintBootAppWithSQL.entities.BankAccount;
 import com.example.SprintBootAppWithSQL.entities.Employee;
 import com.example.SprintBootAppWithSQL.entities.User;
@@ -86,6 +83,12 @@ public class UserService {
             // userRepository.insertBulkUser(item.getUserName(),item.getFirstName(),item.getLastName());
 
         }
+    }
+
+
+    @Transactional
+    public void resetUserPassword(PasswordResetDto passwordResetDto){
+        userRepository.resetUserPassword(passwordResetDto.getId(),passwordEncoder.encode(passwordResetDto.getConfirmPassword()));
     }
 }
 

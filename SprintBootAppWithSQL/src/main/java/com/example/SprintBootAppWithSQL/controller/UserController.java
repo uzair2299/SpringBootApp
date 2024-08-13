@@ -1,5 +1,7 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.dto.PasswordResetDto;
+import com.example.SprintBootAppWithSQL.dto.ResourceDto;
 import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
@@ -32,7 +34,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserRepository userRepository;
 
@@ -47,7 +48,6 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserDto>> getUsers() {
         try {
-            logger.info(String.format("Executing getUser request"));
             List<UserDto> userList = new ArrayList<>();
             userList = userService.getAllAppUsers();
             if (userList.isEmpty()) {
@@ -83,11 +83,11 @@ public class UserController {
     }
 
     @GetMapping("/getUserRoles/{id}")
-    public ResponseEntity<List<Role>> getUserRoles(@PathVariable("id") long userId) {
+    public ResponseEntity<UserDto> getUserRoles(@PathVariable("id") long userId) {
         try {
             System.out.println("User Id - " + userId);
-            List<Role> results = roleService.getUserRoles(userId);
-
+            Map<Long, UserDto> userDtoMap = roleService.getUserRolesWithUserDetails(userId);
+            UserDto result = userDtoMap.get(userId);
 
 //          List<Role> roleList =   results.stream().map(result -> {
 //                Role role = new Role();
@@ -99,7 +99,7 @@ public class UserController {
             //In the context of a Spring Boot application, serialization to JSON typically occurs when the ResponseEntity is being prepared for return to the client. This process is managed by the Spring framework, which uses the Jackson library by default to convert the Java object into a JSON representation
             //The actual conversion to JSON is handled by Jackson. When Jackson serializes the User object, it will attempt to access all non-ignored fields. If any of these fields are lazily loaded collections or associations, accessing them will trigger the lazy loading query.
             //To prevent the lazy loading query for the userRoles field, use the @JsonIgnore annotation. This will ensure that Jackson ignores this field during serialization, thus preventing the lazy loading query from running.
-            return ResponseEntity.ok().body(results);
+            return ResponseEntity.ok().body(result);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -115,6 +115,19 @@ public class UserController {
             //user.setRoles(roles);
             userRepository.save(user);
             return new ResponseEntity<>(new User(), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @RequestMapping(value = "/resetUserPassword", method = RequestMethod.POST)
+    public ResponseEntity<String> resetUserPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        try {
+            if(passwordResetDto.getNewPassword().equals(passwordResetDto.getConfirmPassword())){
+                userService.resetUserPassword(passwordResetDto);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.internalServerError().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -153,7 +166,7 @@ public class UserController {
             }
             try {
 
-                log.info("thread name [{}]",Thread.currentThread().getName());
+                log.info("thread name [{}]", Thread.currentThread().getName());
                 XSSFWorkbook workbook = new XSSFWorkbook(new ByteArrayInputStream(fileContent));
                 XSSFSheet worksheet = workbook.getSheetAt(0);
                 int rowNumber = 0;
@@ -203,15 +216,17 @@ public class UserController {
                         cellNumber++;
                     }
                     userDtoList.add(userDto);
-                    log.info("size of user list [{}]",userDtoList.size());
+                    log.info("size of user list [{}]", userDtoList.size());
                 }
             } catch (Exception exception) {
                 log.error("Error While Handling the Request " + exception.toString());
             }
-        log.info("Data processing completed");
-        userService.insertBulkUser(userDtoList);
+            log.info("Data processing completed");
+            userService.insertBulkUser(userDtoList);
         });
         return ResponseEntity.accepted().body("Request accepted and data processing started");
     }
+
+
 }
 

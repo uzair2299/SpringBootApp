@@ -48,7 +48,7 @@ public class ResourcesService {
         Map<Long, ResourceDto> resourceMap = new HashMap<>();
         for (Object[] object : list) {
             ResourceDto resourceDto = new ResourceDto();
-            PermissionDto permissionDto = new PermissionDto();
+            //PermissionDto permissionDto = new PermissionDto();
             resourceDto.setResourceId(Long.valueOf((Integer) object[0]));
             resourceDto.setResourceEndpoint((String) object[1]);
             resourceDto.setVersion((String) object[2]);

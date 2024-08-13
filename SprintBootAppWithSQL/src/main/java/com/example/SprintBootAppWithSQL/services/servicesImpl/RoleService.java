@@ -1,7 +1,9 @@
 package com.example.SprintBootAppWithSQL.services.servicesImpl;
 
 import com.example.SprintBootAppWithSQL.controller.LoginController;
+import com.example.SprintBootAppWithSQL.dto.ResourceDto;
 import com.example.SprintBootAppWithSQL.dto.RoleDto;
+import com.example.SprintBootAppWithSQL.dto.UserDto;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.RoleRepository;
@@ -19,10 +21,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import jakarta.persistence.EntityManager;
 
@@ -81,13 +80,38 @@ public class RoleService {
         return roles;
     }
 
-    public List<Role> getUserRoles(long userId) {
-        return roleRepository.getUserRoles(userId);
+    public Map<Long, UserDto> getUserRolesWithUserDetails(long userId) {
+        List<Object[]> userRoles = roleRepository.getUserRolesWithUserDetails(userId);
+        List<RoleDto> roleDtoList = this.getAllRoles();
+
+        Map<Long, UserDto> userDtoMap = new HashMap<>();
+        for (Object[] object : userRoles) {
+            UserDto userDto = new UserDto();
+            userDto.setId((Long) object[0]);
+            userDto.setUserName((String) object[1]);
+            userDto.setFirstName((String) object[2]);
+            userDto.setLastName((String) object[3]);
+            userDto.setEmail((String) object[4]);
+            userDtoMap.getOrDefault(userDto.getId(), userDto);
+
+            for (RoleDto item : roleDtoList) {
+                if (item.getId().equals((Long) object[5])) {
+                    item.setChecked(true);
+                }
+            }
+            userDto.setRoles(roleDtoList);
+            userDtoMap.put(userDto.getId(),userDto);
+        }
+       return userDtoMap;
     }
 
 
     public List<Object[]> getRoleResourcePermission(RoleDto roleDto) {
         return roleRepository.getRoleResourcePermission(roleDto.getRoleIds(), roleDto.getEndPoint());
+    }
+
+    public List<Role> getUserRoles(long userId) {
+        return roleRepository.getUserRoles(userId);
     }
 
 }

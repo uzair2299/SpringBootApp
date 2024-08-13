@@ -4,7 +4,9 @@ package com.example.SprintBootAppWithSQL.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -24,4 +26,5 @@ public class UserDto {
     private String primaryPhone;
     private String secondaryPhone;
     private String workPhone;
+    private List<RoleDto> roles = new ArrayList<>();
 }

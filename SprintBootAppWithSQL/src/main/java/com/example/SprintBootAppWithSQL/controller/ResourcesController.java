@@ -115,7 +115,7 @@ public class ResourcesController {
 //
 
     @RequestMapping(value = "/getResourceById/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ResourceDto> getUserRoles(@PathVariable("id") long resourceId) {
+    public ResponseEntity<ResourceDto> getResourceById(@PathVariable("id") long resourceId) {
         try {
             System.out.println("resourceId- " + resourceId);
             Map<Long, ResourceDto> resource = resourcesService.getResourceByIdWithPermissions(resourceId);
