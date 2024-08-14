@@ -1,8 +1,13 @@
 package com.example.SprintBootAppWithSQL.controller;
 
+import com.example.SprintBootAppWithSQL.dto.ResourcePermissionDto;
 import com.example.SprintBootAppWithSQL.dto.RoleDto;
 import com.example.SprintBootAppWithSQL.dto.RoleResourcePermissionDTO;
+import com.example.SprintBootAppWithSQL.dto.UserRoleDto;
+import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
+import com.example.SprintBootAppWithSQL.util.MapperUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +98,20 @@ public class RoleController {
         }
 
         return ResponseEntity.ok().body(roleDto);
+    }
+
+
+    @RequestMapping(value = "/assignUserRoles/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?>  assignUserRoles(@PathVariable("id") long userId, @RequestBody List<Object> o){
+        try {
+            String json = MapperUtil.convertListToJsonString(o);
+            List<UserRoleDto> userRoleDtos = MapperUtil.convertJsonStringToList(json, new TypeReference<List<UserRoleDto>>() {
+            });
+            roleService.assignUserRoles(userId, userRoleDtos);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 //    @PutMapping("/api/v1/users/{id}")

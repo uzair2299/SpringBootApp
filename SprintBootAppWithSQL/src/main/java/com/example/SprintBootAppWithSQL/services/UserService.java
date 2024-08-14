@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    PasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
 
     public List<User> getAllUsers() {
@@ -56,9 +57,9 @@ public class UserService {
         if (result != null && !result.getIsLocked().equals(false)) {
             throw new LockedException(" user account is locked");
         }
-//        if (!passwordEncoder.matches(userDto.getPassword(), result.getPassword())) {
-//            throw new BadCredentialsException("Invalid username/password");
-//        }
+        if (!passwordEncoder.matches(userDto.getPassword(), result.getPassword())) {
+            throw new BadCredentialsException("Invalid username/password");
+        }
         LoginDto user = MapperUtil.mapObject(result, LoginDto.class);
         return user;
     }

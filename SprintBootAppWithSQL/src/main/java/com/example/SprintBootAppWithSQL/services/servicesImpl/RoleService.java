@@ -1,9 +1,7 @@
 package com.example.SprintBootAppWithSQL.services.servicesImpl;
 
 import com.example.SprintBootAppWithSQL.controller.LoginController;
-import com.example.SprintBootAppWithSQL.dto.ResourceDto;
-import com.example.SprintBootAppWithSQL.dto.RoleDto;
-import com.example.SprintBootAppWithSQL.dto.UserDto;
+import com.example.SprintBootAppWithSQL.dto.*;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.repository.RoleRepository;
@@ -24,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleService {
@@ -112,6 +111,20 @@ public class RoleService {
 
     public List<Role> getUserRoles(long userId) {
         return roleRepository.getUserRoles(userId);
+    }
+
+    @Transactional
+    public void assignUserRoles(Long userId ,List<UserRoleDto> userRoleDtos){
+        deleteUserRoles(userId);
+        for(UserRoleDto item : userRoleDtos){
+            if(item.isMarked()){
+                roleRepository.assignUserRoles(userId,item.getRoleId());
+            }
+        }
+    }
+
+    public void deleteUserRoles(long userId){
+        roleRepository.deleteUserRoles(userId);
     }
 
 }

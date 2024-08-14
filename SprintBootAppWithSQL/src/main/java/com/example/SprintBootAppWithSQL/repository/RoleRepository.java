@@ -3,7 +3,9 @@ package com.example.SprintBootAppWithSQL.repository;
 import com.example.SprintBootAppWithSQL.entities.Permission;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -55,5 +57,17 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Object[]>  getRoleResourcePermission(@Param("roleIds") List<Long> roleIds,@Param("endPoint") String endPoint);
 
 
+
+    //The @Transactional annotation is used to define the scope of a single database transaction. When applied to a method or a class, it specifies that the method or all methods in the class are transactional. This means that the methods will be executed within a transaction context, and they will either all succeed or all fail (rollback) as a unit.
+    //The @Modifying annotation is used with a query method to indicate that the query is not a SELECT query and will modify the database (i.e., it's an INSERT, UPDATE, or DELETE operation). This annotation is necessary because Spring Data JPA's default behavior expects methods with @Query to be read-only unless explicitly stated otherwise.
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM user_roles u_r WHERE u_r.user_id = :user_id",nativeQuery = true)
+    void deleteUserRoles(@Param("user_id")Long user_id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO user_roles(user_id,role_id) VALUES(:user_id,:role_id)",nativeQuery = true)
+    void assignUserRoles(@Param("user_id")Long user_id,@Param("role_id")Long role_id);
 }
 
