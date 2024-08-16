@@ -27,8 +27,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Role>  getUserRoles(@Param("userId") long userId);
 
     @Query(value = "SELECT u.id as user_id, u.user_name, u.first_name,u.last_name,u.email, r.id AS role_id,r.role_name FROM app_user AS u\n" +
-            "JOIN user_roles ur ON ur.user_id=u.id\n" +
-            "JOIN roles r ON r.id =ur.role_id\n" +
+            "LEFT JOIN user_roles ur ON ur.user_id=u.id\n" +
+            "LEFT JOIN roles r ON r.id =ur.role_id\n" +
             "WHERE u.id =:userId",nativeQuery = true)
     List<Object[]>  getUserRolesWithUserDetails(@Param("userId") long userId);
 
@@ -69,5 +69,10 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Transactional
     @Query(value = "INSERT INTO user_roles(user_id,role_id) VALUES(:user_id,:role_id)",nativeQuery = true)
     void assignUserRoles(@Param("user_id")Long user_id,@Param("role_id")Long role_id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO roles(role_name,created_at,updated_at,is_deleted,description) VALUES(:role_name,:created_at,:updated_at,:is_deleted,:description)",nativeQuery = true)
+    void createRole(@Param("role_name")String role_name,@Param("created_at")Long created_at,@Param("updated_at")Long updated_at,@Param("is_deleted") Boolean is_deleted,@Param("description") String description);
 }
 

@@ -59,11 +59,16 @@ public class RoleService {
         return roleList;
     }
 
-    public RoleDto createRole(RoleDto roleDto) {
-        Role role = MapperUtil.mapObject(roleDto, Role.class);
-        Role savedRole = roleRepository.save(role);
-        RoleDto savedRoleDto = MapperUtil.mapObject(savedRole, RoleDto.class);
-        return savedRoleDto;
+//    public RoleDto createRole(RoleDto roleDto) {
+//        Role role = MapperUtil.mapObject(roleDto, Role.class);
+//        Role savedRole = roleRepository.save(role);
+//        RoleDto savedRoleDto = MapperUtil.mapObject(savedRole, RoleDto.class);
+//        return savedRoleDto;
+//    }
+
+    @Transactional
+    public void createRole(RoleDto roleDto) {
+        roleRepository.createRole(roleDto.getRoleName(),roleDto.getCreatedAt(),roleDto.getUpdatedAt(),roleDto.isDeleted(),roleDto.getDescription());
     }
 
     public List<Role> saveAll(List<Role> role) {
@@ -93,11 +98,14 @@ public class RoleService {
             userDto.setEmail((String) object[4]);
             userDtoMap.getOrDefault(userDto.getId(), userDto);
 
-            for (RoleDto item : roleDtoList) {
-                if (item.getId().equals((Long) object[5])) {
-                    item.setChecked(true);
+            if(object[5] != null){
+                for (RoleDto item : roleDtoList) {
+                    if (item.getId().equals((Long) object[5])) {
+                        item.setDeleted(true);
+                    }
                 }
             }
+
             userDto.setRoles(roleDtoList);
             userDtoMap.put(userDto.getId(),userDto);
         }

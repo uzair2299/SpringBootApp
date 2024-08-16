@@ -16,9 +16,9 @@ public class RoleDto {
     private Long id;
     private String roleName;
     private String description;
-    private Date createdAt;
-    private Date updatedAt;
+    private Long createdAt;
+    private Long updatedAt;
     private String endPoint;
-    private boolean isChecked;
+    private boolean isDeleted;
     private List<Long> roleIds;
 }

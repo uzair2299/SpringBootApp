@@ -56,14 +56,14 @@ public class RoleController {
         }
     }
 
-    @PostMapping("/api/v1/roles")
-    public ResponseEntity<RoleDto> createRole(@RequestBody RoleDto roleDto) {
+    @RequestMapping(value = "/createRole", method = RequestMethod.POST)
+    public ResponseEntity<?> createRole(@RequestBody RoleDto roleDto) {
         try {
             logger.info(String.format("roleDto - " + roleDto));
-            roleDto.setCreatedAt(new Date());
-            roleDto.setUpdatedAt(new Date());
-            RoleDto role = roleService.createRole(roleDto);
-            return new ResponseEntity<>(role, HttpStatus.CREATED);
+            roleDto.setCreatedAt(System.currentTimeMillis());
+            roleDto.setUpdatedAt(System.currentTimeMillis());
+            roleService.createRole(roleDto);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
