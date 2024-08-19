@@ -1,9 +1,6 @@
 package com.example.SprintBootAppWithSQL.controller;
 
-import com.example.SprintBootAppWithSQL.dto.ResourcePermissionDto;
-import com.example.SprintBootAppWithSQL.dto.RoleDto;
-import com.example.SprintBootAppWithSQL.dto.RoleResourcePermissionDTO;
-import com.example.SprintBootAppWithSQL.dto.UserRoleDto;
+import com.example.SprintBootAppWithSQL.dto.*;
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
@@ -15,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/roles")
@@ -72,33 +67,86 @@ public class RoleController {
 
 
     //@GetMapping("/getRoleResourcePermission")
-    @RequestMapping(value = "/getRoleResourcePermission", method = RequestMethod.POST)
-    public ResponseEntity<List<RoleResourcePermissionDTO>>  getRoleResourcePermission(@RequestBody RoleDto roleDtos){
-        List<Object[]> o =  roleService.getRoleResourcePermission(roleDtos);
+    @RequestMapping(value = "/getRoleAssignResourcesPermission", method = RequestMethod.POST)
+    public ResponseEntity<List<RoleAssignedResourcePermissionDTO>>  getRoleAssignResourcesPermission(@RequestBody RoleDto roleDtos){
+        List<Object[]> o =  roleService.getRoleAssignResourcesPermission(roleDtos);
         List<RoleResourcePermissionDTO> roleDto = new ArrayList<>();
 
-        for(Object[] item :o){
-            RoleResourcePermissionDTO permissionDTO = new RoleResourcePermissionDTO();
-            permissionDTO.setRRoleId((Long) item[0]);
-            permissionDTO.setRoleName((String) item[1]);
-            permissionDTO.setRrpRoleId(Long.valueOf((Integer) item[2]));
-            permissionDTO.setRrpResourcesPermissionsId(Long.valueOf((Integer) item[3]));
-            permissionDTO.setRpId((Long) item[4]);
-            permissionDTO.setRpResourceId(Long.valueOf((Integer) item[5]));
 
-            permissionDTO.setRpPermissionId(Long.valueOf((Integer) item[6]));
-            permissionDTO.setPermissionName((String) item[7]);
-            permissionDTO.setPId((Long) item[8]);
-            permissionDTO.setReId(Long.valueOf((Integer) item[9]));
-            permissionDTO.setResourceName((String) item[10]);
-            permissionDTO.setMethodType((String) item[11]);
-            permissionDTO.setResourceEndpoint((String) item[12]);
-            roleDto.add(permissionDTO);
+//        rrp.resources_permissions_id,
+//        rrp.role_id,
+//        rp.permission_id,
+//        rp.resource_id,
+//        p.permission_name,
+//        re.id as resource_id,
+//        re.resource_name,
+//        re.method_type,
+//        re.resource_endpoint,
+//        r.role_name
+
+
+        Map<String, RoleAssignedResourcePermissionDTO> rolesAssignedResourcePermission = new HashMap<>();
+
+        for(Object[] item :o){
+
+
+            rolesAssignedResourcePermission.putIfAbsent(String.valueOf((Long) item[10]),new RoleAssignedResourcePermissionDTO());
+
+            RoleAssignedResourcePermissionDTO role = rolesAssignedResourcePermission.get(String.valueOf((Long) item[10]));
+            RoleDto r = new RoleDto();
+            r.setId((Long) item[10]);
+            r.setRoleName((String) item[9]);
+            role.setRoles(r);
+
+            r.getResources().putIfAbsent(String.valueOf(Long.valueOf((Integer) item[5])),new ResourceDto());
+            ResourceDto resource = r.getResources().get(String.valueOf(Long.valueOf((Integer) item[5])));
+            resource.setResourceName((String) item[6]);
+            resource.setResourceId(Long.valueOf((Integer) item[3]));
+            resource.setMethodType((String) item[7]);
+            resource.setResourceEndpoint((String) item[8]);
+            PermissionDto p = new PermissionDto();
+            p.setId(Long.valueOf((Integer) item[2]));
+            p.setPermissionName((String) item[4]);
+
+            resource.getPermissions().add(p);
+
+//
+//
+//
+//            RoleResourcePermissionDTO permissionDTO = new RoleResourcePermissionDTO();
+//            permissionDTO.setResourcesPermissionsId((Long) item[0]);
+//            permissionDTO.setRRoleId((Long) item[1]);
+//            permissionDTO.setPId((Long) item[2]);
+//            permissionDTO.setReId(Long.valueOf((Integer) item[3]));
+//            permissionDTO.setPermissionName((String) item[4]);
+//            permissionDTO.setReId(Long.valueOf((Integer) item[5]));
+//            permissionDTO.setResourceName((String) item[6]);
+//            permissionDTO.setMethodType((String) item[7]);
+//            permissionDTO.setResourceEndpoint((String) item[8]);
+//            permissionDTO.setRoleName((String) item[9]);
+//            permissionDTO.setRRoleId((Long) item[10]);
+//            roleDto.add(permissionDTO);
 
         }
 
-        return ResponseEntity.ok().body(roleDto);
+        List<RoleAssignedResourcePermissionDTO> roleDtoList = new ArrayList<>(rolesAssignedResourcePermission.values());
+        return ResponseEntity.ok().body(roleDtoList);
     }
+
+
+
+    @RequestMapping(value = "/assignRolesPermission/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?>  assignRolesPermission(@PathVariable("id") long roleId, @RequestBody List<ResourceDto> resourceDtos){
+        try {
+
+            roleService.assignRolePermissions(roleId,resourceDtos);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+
 
 
     @RequestMapping(value = "/assignUserRoles/{id}", method = RequestMethod.POST)

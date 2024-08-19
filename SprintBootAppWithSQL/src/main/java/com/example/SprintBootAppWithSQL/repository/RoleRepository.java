@@ -57,6 +57,25 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Object[]>  getRoleResourcePermission(@Param("roleIds") List<Long> roleIds,@Param("endPoint") String endPoint);
 
 
+    @Query(value = "SELECT rrp.resources_permissions_id,\n" +
+            "rrp.role_id,\n" +
+            "rp.permission_id,\n" +
+            "rp.resource_id,\n" +
+            "p.permission_name,\n" +
+            "re.id as resource_id,\n" +
+            "re.resource_name,\n" +
+            "re.method_type,\n" +
+            "re.resource_endpoint,\n" +
+            "r.role_name,\n" +
+            "r.id as role_id\n" +
+            "FROM public.roles_resources_permissions as rrp\n" +
+            "JOIN resources_permissions rp ON rrp.resources_permissions_id = rp.id\n" +
+            "JOIN public.permission p ON rp.permission_id = p.id \n" +
+            "JOIN public.resources re ON rp.resource_id = re.id\n" +
+            "JOIN public.roles r ON rrp.role_id = r.id\n" +
+            "WHERE rrp.role_id IN:roleIds",nativeQuery = true)
+    List<Object[]>  getRoleAssignResourcesPermission(@Param("roleIds") List<Long> roleIds);
+
 
     //The @Transactional annotation is used to define the scope of a single database transaction. When applied to a method or a class, it specifies that the method or all methods in the class are transactional. This means that the methods will be executed within a transaction context, and they will either all succeed or all fail (rollback) as a unit.
     //The @Modifying annotation is used with a query method to indicate that the query is not a SELECT query and will modify the database (i.e., it's an INSERT, UPDATE, or DELETE operation). This annotation is necessary because Spring Data JPA's default behavior expects methods with @Query to be read-only unless explicitly stated otherwise.
@@ -74,5 +93,15 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Transactional
     @Query(value = "INSERT INTO roles(role_name,created_at,updated_at,is_deleted,description) VALUES(:role_name,:created_at,:updated_at,:is_deleted,:description)",nativeQuery = true)
     void createRole(@Param("role_name")String role_name,@Param("created_at")Long created_at,@Param("updated_at")Long updated_at,@Param("is_deleted") Boolean is_deleted,@Param("description") String description);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO roles_resources_permissions(resources_permissions_id,role_id) VALUES(:resources_permissions_id,:role_id)",nativeQuery = true)
+    void assignRolePermissions(@Param("resources_permissions_id")Long resources_permissions_id,@Param("role_id") Long role_id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM roles_resources_permissions rrp WHERE rrp.role_id = :role_id",nativeQuery = true)
+    void deleteAssignRolePermissions(@Param("role_id") Long role_id);
 }
 

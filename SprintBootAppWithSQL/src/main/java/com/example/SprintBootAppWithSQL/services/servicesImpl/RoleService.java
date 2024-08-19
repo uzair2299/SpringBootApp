@@ -68,7 +68,7 @@ public class RoleService {
 
     @Transactional
     public void createRole(RoleDto roleDto) {
-        roleRepository.createRole(roleDto.getRoleName(),roleDto.getCreatedAt(),roleDto.getUpdatedAt(),roleDto.isDeleted(),roleDto.getDescription());
+        roleRepository.createRole(roleDto.getRoleName(), roleDto.getCreatedAt(), roleDto.getUpdatedAt(), roleDto.isDeleted(), roleDto.getDescription());
     }
 
     public List<Role> saveAll(List<Role> role) {
@@ -98,7 +98,7 @@ public class RoleService {
             userDto.setEmail((String) object[4]);
             userDtoMap.getOrDefault(userDto.getId(), userDto);
 
-            if(object[5] != null){
+            if (object[5] != null) {
                 for (RoleDto item : roleDtoList) {
                     if (item.getId().equals((Long) object[5])) {
                         item.setDeleted(true);
@@ -107,9 +107,9 @@ public class RoleService {
             }
 
             userDto.setRoles(roleDtoList);
-            userDtoMap.put(userDto.getId(),userDto);
+            userDtoMap.put(userDto.getId(), userDto);
         }
-       return userDtoMap;
+        return userDtoMap;
     }
 
 
@@ -117,21 +117,39 @@ public class RoleService {
         return roleRepository.getRoleResourcePermission(roleDto.getRoleIds(), roleDto.getEndPoint());
     }
 
+    public List<Object[]> getRoleAssignResourcesPermission(RoleDto roleDto) {
+        return roleRepository.getRoleAssignResourcesPermission(roleDto.getRoleIds());
+    }
+
+
     public List<Role> getUserRoles(long userId) {
         return roleRepository.getUserRoles(userId);
     }
 
     @Transactional
-    public void assignUserRoles(Long userId ,List<UserRoleDto> userRoleDtos){
+    public void assignUserRoles(Long userId, List<UserRoleDto> userRoleDtos) {
         deleteUserRoles(userId);
-        for(UserRoleDto item : userRoleDtos){
-            if(item.isMarked()){
-                roleRepository.assignUserRoles(userId,item.getRoleId());
+        for (UserRoleDto item : userRoleDtos) {
+            if (item.isMarked()) {
+                roleRepository.assignUserRoles(userId, item.getRoleId());
             }
         }
     }
 
-    public void deleteUserRoles(long userId){
+
+    @Transactional
+    public void assignRolePermissions(Long roleId, List<ResourceDto> resourceDto) {
+        roleRepository.deleteAssignRolePermissions(roleId);
+        for (ResourceDto item : resourceDto) {
+            for (PermissionDto permissionDto : item.getPermissions()) {
+                if (permissionDto.isChecked()) {
+                    roleRepository.assignRolePermissions(permissionDto.getResourcesPermissionsId(), roleId);
+                }
+            }
+        }
+    }
+
+    public void deleteUserRoles(long userId) {
         roleRepository.deleteUserRoles(userId);
     }
 

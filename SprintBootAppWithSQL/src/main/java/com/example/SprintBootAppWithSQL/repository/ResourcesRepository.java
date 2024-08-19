@@ -20,7 +20,7 @@ public interface ResourcesRepository extends JpaRepository<Resource, Long> {
     List<Object[]> getAll();
 
 
-    @Query(value = "SELECT r.id,r.resource_name,r.version, r.method_type, p.id,p.permission_name\n" +
+    @Query(value = "SELECT r.id,r.resource_name,r.version, r.method_type, p.id,p.permission_name,rp.id as resources_Permissions_Id\n" +
             "FROM public.resources r\n" +
             "LEFT JOIN resources_permissions rp ON rp.resource_id =r.id\n" +
             "LEFT JOIN permission p ON rp.permission_id =p.id",nativeQuery = true)
@@ -42,6 +42,7 @@ public interface ResourcesRepository extends JpaRepository<Resource, Long> {
     @Transactional
     @Query(value = "INSERT INTO resources_permissions(permission_id,resource_id) VALUES(:permission_id,:resource_id)",nativeQuery = true)
     void assignResourcePermission(Long permission_id,Long resource_id);
+
 
 
     @Modifying

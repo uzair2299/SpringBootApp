@@ -22,5 +22,6 @@ public class RoleResourcePermissionDTO {
     private Long reId;                      // Resource ID from 'resources'
     private String resourceName;            // Resource name from 'resources'
     private String methodType;              // Method type from 'resources'
-    private String resourceEndpoint;        // Resource endpoint from 'resources'
+    private String resourceEndpoint;        // Resource endpoint from 'resources// '
+    private Long resourcesPermissionsId;
 }

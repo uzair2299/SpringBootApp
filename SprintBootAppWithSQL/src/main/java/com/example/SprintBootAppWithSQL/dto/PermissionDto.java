@@ -25,4 +25,5 @@ public class PermissionDto {
     private Long updatedAt;
     private String description;
     private boolean isChecked;
+    private Long resourcesPermissionsId;
 }

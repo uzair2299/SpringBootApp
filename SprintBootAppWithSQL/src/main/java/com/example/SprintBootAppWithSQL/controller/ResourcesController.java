@@ -65,8 +65,10 @@ public class ResourcesController {
 
                 if (object.length > 3 && object[5] != null) {
                     permissionDto.setPermissionName(String.valueOf(object[5]));
+                    permissionDto.setResourcesPermissionsId((Long)object[6]);
                     resource.getPermissions().add(permissionDto);
                 }
+
 
                 resourceMap.put(resourceDto.getResourceId(), resource);
             }

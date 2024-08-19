@@ -7,7 +7,9 @@ import lombok.*;
 import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Getter
@@ -21,4 +23,5 @@ public class RoleDto {
     private String endPoint;
     private boolean isDeleted;
     private List<Long> roleIds;
+    private Map<String, ResourceDto> resources = new HashMap<>();
 }
