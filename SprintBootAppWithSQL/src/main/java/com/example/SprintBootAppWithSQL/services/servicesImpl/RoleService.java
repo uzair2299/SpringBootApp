@@ -71,6 +71,11 @@ public class RoleService {
         roleRepository.createRole(roleDto.getRoleName(), roleDto.getCreatedAt(), roleDto.getUpdatedAt(), roleDto.isDeleted(), roleDto.getDescription());
     }
 
+    @Transactional
+    public void updateRole(RoleDto roleDto) {
+        roleRepository.updateRole(roleDto.getId(),roleDto.getRoleName(), roleDto.getUpdatedAt(), roleDto.isDeleted(), roleDto.getDescription());
+    }
+
     public List<Role> saveAll(List<Role> role) {
         return roleRepository.saveAll(role);
     }

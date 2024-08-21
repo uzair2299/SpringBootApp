@@ -94,6 +94,12 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Query(value = "INSERT INTO roles(role_name,created_at,updated_at,is_deleted,description) VALUES(:role_name,:created_at,:updated_at,:is_deleted,:description)",nativeQuery = true)
     void createRole(@Param("role_name")String role_name,@Param("created_at")Long created_at,@Param("updated_at")Long updated_at,@Param("is_deleted") Boolean is_deleted,@Param("description") String description);
 
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE roles SET role_name = :role_name, updated_at = :updated_at, is_deleted = :is_deleted, description = :description WHERE id = :id", nativeQuery = true)
+    void updateRole(@Param("id")Long id,@Param("role_name")String role_name,@Param("updated_at")Long updated_at,@Param("is_deleted") Boolean is_deleted,@Param("description") String description);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO roles_resources_permissions(resources_permissions_id,role_id) VALUES(:resources_permissions_id,:role_id)",nativeQuery = true)

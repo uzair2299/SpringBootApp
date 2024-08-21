@@ -2,14 +2,12 @@ package com.example.SprintBootAppWithSQL.dto;
 
 import com.example.SprintBootAppWithSQL.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Getter
@@ -21,7 +19,8 @@ public class RoleDto {
     private Long createdAt;
     private Long updatedAt;
     private String endPoint;
+    @JsonProperty("isDeleted")
     private boolean isDeleted;
     private List<Long> roleIds;
-    private Map<String, ResourceDto> resources = new HashMap<>();
+    private List<ResourceDto> resources = new ArrayList<>();
 }
