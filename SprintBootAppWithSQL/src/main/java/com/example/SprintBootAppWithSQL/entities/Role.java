@@ -28,6 +28,8 @@ public class Role implements Serializable {
     private Long createdAt;
     @Column(name = "updated_at")
     private Long updatedAt;
+    @Column(name = "is_Deleted")
+    private boolean isDeleted;
 
 
     @JsonIgnore

@@ -1,14 +1,13 @@
 package com.example.SprintBootAppWithSQL.controller;
 
 import com.example.SprintBootAppWithSQL.dto.*;
-import com.example.SprintBootAppWithSQL.entities.User;
 import com.example.SprintBootAppWithSQL.services.servicesImpl.RoleService;
 import com.example.SprintBootAppWithSQL.util.MapperUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +15,27 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/roles")
+@Slf4j
 public class RoleController {
     Logger logger = LoggerFactory.getLogger(RoleController.class);
     @Autowired
     RoleService roleService;
 
 
+    //his tells Spring to look for a query parameter named searchValue in the request URL.
+    //required = false means this parameter is optional; if it's not provided, the method still works.
     @GetMapping("/getAllRoles")
-    public ResponseEntity<List<RoleDto>> getAllRoles() {
+    public ResponseEntity<List<RoleDto>> getAllRoles(@RequestParam(required = false) String searchValue) {
         try {
 
-            logger.info(String.format("Executing getRoles request"));
+            log.info(String.format("Executing getRoles request"));
             List<RoleDto> rolesList;
-            rolesList = roleService.getAllRoles();
+            if (searchValue != null && !searchValue.isEmpty()) {
+                log.info("Executing getRoles request with search query param is {}", searchValue);
+                rolesList = roleService.getAllRoles(searchValue);
+            } else {
+                rolesList = roleService.getAllRoles(searchValue);
+            }
             if (rolesList.isEmpty()) {
                 logger.info(String.format("Leaving getRoles request - roles list is empty"));
                 return ResponseEntity.noContent().build();
@@ -50,7 +57,6 @@ public class RoleController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
 
 
     @RequestMapping(value = "/updateRole", method = RequestMethod.PUT)
@@ -115,12 +121,12 @@ public class RoleController {
 
 
             RoleAssignedResourcePermissionDTO rrp = rolesAssignedResourcePermission.computeIfAbsent(String.valueOf((Long) item[10]), id -> {
-                RoleAssignedResourcePermissionDTO roleAssignedResourcePermissionDTO =  new RoleAssignedResourcePermissionDTO();
+                RoleAssignedResourcePermissionDTO roleAssignedResourcePermissionDTO = new RoleAssignedResourcePermissionDTO();
                 RoleDto r = new RoleDto();
                 r.setId((Long) item[10]);
                 r.setRoleName((String) item[9]);
                 roleAssignedResourcePermissionDTO.setRoles(r);
-                return  roleAssignedResourcePermissionDTO;
+                return roleAssignedResourcePermissionDTO;
             });
 
 
@@ -140,8 +146,6 @@ public class RoleController {
                         rrp.getRoles().getResources().add(resourceDto);
                         return resourceDto;
                     });
-
-
 
 
             PermissionDto p = new PermissionDto();
