@@ -25,23 +25,31 @@ public class RoleController {
     //his tells Spring to look for a query parameter named searchValue in the request URL.
     //required = false means this parameter is optional; if it's not provided, the method still works.
     @GetMapping("/getAllRoles")
-    public ResponseEntity<List<RoleDto>> getAllRoles(@RequestParam(required = false) String searchValue) {
+    public ResponseEntity<PaginatedResponse<RoleDto>> getAllRoles(
+            @RequestParam(required = false) String searchValue,
+            @RequestParam(defaultValue = "0") int pageIndex,
+            @RequestParam(defaultValue = "10") int pageSize
+    ) {
         try {
 
-            log.info(String.format("Executing getRoles request"));
+            log.info("Executing getRoles request with search query param is {} pageIndex {} and pageSize {}", searchValue,pageIndex,pageSize);
             List<RoleDto> rolesList;
+            Long totalCount = 0L;
             if (searchValue != null && !searchValue.isEmpty()) {
-                log.info("Executing getRoles request with search query param is {}", searchValue);
-                rolesList = roleService.getAllRoles(searchValue);
+                 totalCount =  roleService.getRoleCount(searchValue);
+                rolesList = roleService.getAllRoles(searchValue,pageIndex,pageSize);
             } else {
-                rolesList = roleService.getAllRoles(searchValue);
+                totalCount =  roleService.getRoleCount(searchValue);
+                rolesList = roleService.getAllRoles(searchValue,pageIndex,pageSize);
             }
             if (rolesList.isEmpty()) {
                 logger.info(String.format("Leaving getRoles request - roles list is empty"));
                 return ResponseEntity.noContent().build();
             }
             logger.info(String.format("Leaving getRoles request - with roles list"));
-            return ResponseEntity.ok().body(rolesList);
+            PaginatedResponse<RoleDto> paginatedResponse = new PaginatedResponse<>(
+                    rolesList, totalCount, pageIndex, pageSize);
+            return ResponseEntity.ok().body(paginatedResponse);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }

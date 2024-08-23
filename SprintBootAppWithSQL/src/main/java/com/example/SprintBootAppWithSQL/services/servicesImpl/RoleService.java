@@ -1,5 +1,7 @@
 package com.example.SprintBootAppWithSQL.services.servicesImpl;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import com.example.SprintBootAppWithSQL.controller.LoginController;
 import com.example.SprintBootAppWithSQL.dto.*;
 import com.example.SprintBootAppWithSQL.entities.Role;
@@ -8,8 +10,8 @@ import com.example.SprintBootAppWithSQL.util.MapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 import jakarta.persistence.EntityManager;
@@ -26,6 +28,18 @@ public class RoleService {
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     //    @Cacheable(value = "allDataCache")
+    public List<RoleDto> getAllRoles(String searchValue,int pageIndex, int pageSize) {
+        logger.info(String.format("Entering method in RoleService.getAllRoles()"));
+        List<RoleDto> roleDtoList;
+        List<Role> roleList = roleRepository.findAllRolesOrderByIdAsc(searchValue,pageSize,pageIndex*pageSize);
+        roleDtoList = MapperUtil.mapList(roleList, RoleDto.class);
+        logger.info(String.format("Leaving method in RoleService.getAllRoles()"));
+        return roleDtoList;
+    }
+    public Long getRoleCount(String searchValue){
+       return roleRepository.findAllRolesCount(searchValue);
+    }
+
     public List<RoleDto> getAllRoles(String searchValue) {
         logger.info(String.format("Entering method in RoleService.getAllRoles()"));
         List<RoleDto> roleDtoList;

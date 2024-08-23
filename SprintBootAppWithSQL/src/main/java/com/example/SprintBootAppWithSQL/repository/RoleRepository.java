@@ -4,10 +4,12 @@ import com.example.SprintBootAppWithSQL.entities.Permission;
 import com.example.SprintBootAppWithSQL.entities.Role;
 import com.example.SprintBootAppWithSQL.entities.User;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +28,13 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     //    at com.zaxxer.hikari.pool.HikariProxyResultSet.findColumn(HikariProxyResultSet.java)
     @Query(value = "SELECT * FROM public.roles WHERE (:searchValue IS NULL OR role_name ILIKE %:searchValue%)", nativeQuery = true)
     List<Role>  findAllRolesOrderByIdAsc(@Param("searchValue") String searchValue);
+    @Query(value = "SELECT * FROM public.roles WHERE (:searchValue IS NULL OR role_name ILIKE %:searchValue%) ORDER BY id ASC LIMIT :pageSize OFFSET :offset", nativeQuery = true)
+    List<Role>  findAllRolesOrderByIdAsc(@Param("searchValue") String searchValue, @Param("pageSize") Integer pageSize,Integer offset);
+
+    @Query(value = "SELECT COUNT(*) FROM public.roles WHERE (:searchValue IS NULL OR role_name ILIKE %:searchValue%)", nativeQuery = true)
+    Long  findAllRolesCount(@Param("searchValue") String searchValue);
+
+
 
     @Query(value = "SELECT r.id,r.role_Name,r.created_at,r.description,r.updated_at FROM public.roles r\n" +
             "JOIN user_roles ur ON ur.role_id = r.id\n" +
