@@ -64,32 +64,6 @@ public class MenuService {
         return menuRepository.saveAll(menuList);
     }
 
-//
-//    public List<Role> getAllRoles_() {
-//        List<Role> roleList = roleRepository.findAll();
-//        return roleList;
-//    }
-//
 
-
-//    public RoleDto createRole(RoleDto roleDto) {
-//        Role role =  MapperUtil.mapObject(roleDto,Role.class);
-//        Role savedRole = roleRepository.save(role);
-//        RoleDto savedRoleDto = MapperUtil.mapObject(savedRole, RoleDto.class);
-//        return savedRoleDto;
-//    }
-//
-//    public List<Role> saveAll(List<Role> role) {
-//        return roleRepository.saveAll(role);
-//    }
-//
-//    public Long getRolesCount() {
-//        return roleRepository.count();
-//    }
-//
-//    public List<Role> getEntitiesByIds(List<Long> ids) {
-//        List<Role> roles = roleRepository.findByIdIn(ids);
-//        return roles;
-//    }
 
 }
