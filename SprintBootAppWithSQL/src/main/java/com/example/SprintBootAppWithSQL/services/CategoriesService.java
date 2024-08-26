@@ -31,7 +31,7 @@ public class CategoriesService {
             categoriesDto.setId((Long) result[0]);
             categoriesDto.setName((String) result[1]);
             //categoriesDto.setLevel((Integer) result[2]);
-            categoriesDto.setParent_id((Integer) Objects.requireNonNullElse(result[2], 0));
+            categoriesDto.setParent_id((Long) Objects.requireNonNullElse(result[2], 0));
             //categoriesDto.setLink((String) result[4]);
             //categoriesDto.setIcon((String) result[5]);
             menuDtoList.add(categoriesDto);

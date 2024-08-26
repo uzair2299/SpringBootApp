@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/Categories")
+@RequestMapping("/api/v1/categories")
 @Slf4j
 public class CategoriesController {
     @Autowired
@@ -23,7 +23,7 @@ public class CategoriesController {
     @Autowired
     CategoriesService categoriesService;
 
-    @GetMapping("/getCategoryHierarchy")
+    @GetMapping("/getActiveCategoryHierarchy")
     public ResponseEntity<List<CategoriesDto>> getCategoryHierarchy() {
         try {
 
@@ -37,6 +37,7 @@ public class CategoriesController {
             log.info(String.format("Leaving getRoles request - with roles list"));
             return ResponseEntity.ok().body(rolesList);
         } catch (Exception e) {
+            log.error("going to log exception {}",e);
             return ResponseEntity.internalServerError().build();
         }
     }
